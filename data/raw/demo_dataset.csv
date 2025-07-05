@@ -1,0 +1,101 @@
+participant_id,age_group,socioeconomic_status,living_situation,cognitive_status,physical_mobility,hearing_vision_impairment,chronic_conditions,medication_effects,caregiver_support,social_engagement,digital_literacy,internet_access,attitude_toward_technology,previous_tech_use,agetch_experience,tech_assistance_availability,willingness_new_tech,device_preferences,digital_willingness_interaction,cognitive_assistance_interaction,social_caregiver_interaction,technology_readiness_index,health_risk_score,adoption_success
+1,65-74,Low,Assisted Living,No Impairment,Independent,Mild,0-1,Mild,Formal Only,Isolated,Low,None,Positive,None,None,Limited,Low,Advanced,0,0,0,7,1,1
+2,85+,Medium,Independent Living,No Impairment,Full Assistance,Mild,0-1,None,None,Isolated,Medium,Reliable,Negative,Advanced,None,Limited,Medium,Standard,0,0,0,12,3,1
+3,75-84,Medium,Independent Living,No Impairment,Independent,None,0-1,None,Informal Only,Isolated,High,Reliable,Negative,None,None,None,Low,Simple,0,0,0,9,0,0
+4,75-84,Medium,Nursing Home,No Impairment,Assistive Device,Moderate,0-1,None,Informal Only,Moderate,Medium,Reliable,Neutral,Basic,Limited,Limited,Medium,Standard,0,0,0,11,3,1
+5,65-74,High,Assisted Living,MCI,Independent,Mild,0-1,None,Informal Only,Moderate,High,Reliable,Neutral,Intermediate,Limited,Limited,Low,Standard,0,0,0,12,2,0
+6,65-74,Low,Independent Living,Dementia,Assistive Device,None,2-3,Significant,Formal Only,Active,Medium,Limited,Positive,Intermediate,Limited,Limited,Medium,Simple,0,0,1,12,4,1
+7,65-74,Medium,Independent Living,No Impairment,Independent,Moderate,0-1,None,Both,Active,Medium,Limited,Neutral,Intermediate,Moderate,Limited,Low,Standard,0,0,1,10,2,1
+8,85+,High,Assisted Living,No Impairment,Independent,Moderate,2-3,Moderate,Both,Moderate,High,Reliable,Neutral,Intermediate,Moderate,Limited,High,Simple,1,0,0,14,3,1
+9,75-84,Low,Independent Living,MCI,Full Assistance,Moderate,2-3,None,Informal Only,Moderate,Low,Reliable,Neutral,Basic,Limited,Limited,Low,Standard,0,0,0,9,6,0
+10,75-84,Low,Independent Living,No Impairment,Independent,Mild,2-3,Mild,None,Moderate,Medium,Limited,Positive,Intermediate,Moderate,Readily Available,Medium,Standard,0,1,0,12,2,1
+11,65-74,Medium,Independent Living,No Impairment,Independent,Mild,0-1,Mild,Both,Moderate,Low,Reliable,Neutral,None,None,Readily Available,High,Simple,0,1,0,10,1,1
+12,85+,Low,Assisted Living,No Impairment,Full Assistance,Mild,4+,Mild,Both,Moderate,High,Limited,Neutral,Intermediate,None,Readily Available,Medium,Simple,0,1,0,12,5,1
+13,75-84,High,Assisted Living,No Impairment,Full Assistance,Moderate,2-3,None,None,Moderate,High,Limited,Negative,Basic,None,Readily Available,Medium,Standard,0,1,0,10,5,1
+14,65-74,High,Independent Living,Dementia,Independent,Moderate,0-1,None,Both,Moderate,Low,Reliable,Positive,Intermediate,None,None,Medium,Standard,0,0,0,12,4,0
+15,65-74,Medium,Assisted Living,MCI,Independent,None,4+,None,Both,Moderate,Medium,Reliable,Neutral,Basic,Limited,None,Medium,Simple,0,0,0,11,3,0
+16,65-74,High,Independent Living,No Impairment,Independent,None,4+,Moderate,Informal Only,Moderate,High,Reliable,Neutral,Basic,Moderate,None,Medium,Advanced,0,0,0,12,2,0
+17,65-74,High,Independent Living,No Impairment,Independent,None,0-1,Moderate,Informal Only,Moderate,Low,None,Negative,Basic,None,Limited,High,Simple,0,0,0,8,0,0
+18,75-84,Low,Assisted Living,No Impairment,Independent,Moderate,0-1,Significant,Informal Only,Active,Medium,Reliable,Neutral,Intermediate,None,Readily Available,Medium,Standard,0,1,1,12,2,0
+19,65-74,High,Assisted Living,No Impairment,Assistive Device,Severe,4+,None,None,Active,High,Limited,Neutral,None,Limited,Limited,Medium,Advanced,0,0,0,10,6,1
+20,65-74,Medium,Nursing Home,No Impairment,Assistive Device,None,2-3,Mild,Informal Only,Isolated,Low,None,Neutral,None,Moderate,Readily Available,Medium,Simple,0,1,0,7,2,1
+21,75-84,High,Assisted Living,No Impairment,Assistive Device,Mild,0-1,Moderate,Both,Active,Medium,Reliable,Positive,None,None,None,Medium,Simple,0,0,1,11,2,1
+22,65-74,High,Independent Living,MCI,Assistive Device,None,0-1,None,None,Moderate,Low,Reliable,Negative,None,Limited,Readily Available,Low,Simple,0,0,0,7,2,0
+23,65-74,Medium,Independent Living,No Impairment,Independent,Severe,2-3,None,Informal Only,Active,High,Reliable,Neutral,Intermediate,None,Limited,Medium,Simple,0,0,1,13,4,1
+24,65-74,Low,Independent Living,No Impairment,Independent,Moderate,2-3,Mild,Informal Only,Active,High,Reliable,Positive,None,None,None,High,Simple,1,0,1,13,3,1
+25,75-84,Low,Independent Living,Dementia,Independent,Moderate,2-3,Mild,Informal Only,Moderate,High,Reliable,Neutral,Advanced,Extensive,Limited,Low,Standard,0,0,0,13,5,0
+26,75-84,Medium,Independent Living,MCI,Independent,Mild,2-3,Moderate,Both,Isolated,Medium,Reliable,Neutral,Basic,Extensive,Limited,Medium,Simple,0,0,0,11,3,0
+27,65-74,High,With Family,No Impairment,Independent,Mild,2-3,None,Informal Only,Moderate,High,None,Neutral,None,None,Limited,Low,Standard,0,0,0,8,2,1
+28,75-84,High,Independent Living,No Impairment,Assistive Device,None,2-3,Mild,Informal Only,Moderate,High,Limited,Neutral,Intermediate,Extensive,Limited,Medium,Advanced,0,0,0,12,2,0
+29,75-84,Low,Nursing Home,No Impairment,Independent,None,0-1,None,Formal Only,Moderate,Medium,Limited,Positive,Intermediate,Limited,Readily Available,Low,Standard,0,1,0,11,0,0
+30,65-74,Medium,Assisted Living,No Impairment,Independent,Moderate,0-1,None,Informal Only,Moderate,High,Limited,Neutral,Basic,Moderate,Limited,Medium,Standard,0,0,0,11,2,1
+31,75-84,Medium,Assisted Living,No Impairment,Independent,Moderate,2-3,None,Informal Only,Isolated,Low,Reliable,Positive,Basic,Limited,Limited,High,Simple,0,0,0,12,3,0
+32,65-74,Low,Independent Living,MCI,Assistive Device,Severe,4+,Moderate,Informal Only,Active,Medium,Limited,Neutral,Intermediate,Limited,Limited,Medium,Standard,0,0,1,11,7,1
+33,65-74,Low,Independent Living,No Impairment,Independent,Severe,2-3,Mild,None,Active,Low,None,Neutral,None,Limited,Readily Available,Medium,Standard,0,1,0,7,4,1
+34,85+,Medium,Independent Living,No Impairment,Independent,Mild,2-3,Mild,None,Moderate,Low,Limited,Negative,Advanced,Limited,Limited,High,Standard,0,0,0,11,2,1
+35,85+,High,Independent Living,No Impairment,Independent,Moderate,0-1,None,Informal Only,Isolated,Low,Reliable,Neutral,Advanced,None,Limited,High,Simple,0,0,0,13,2,0
+36,75-84,Medium,Assisted Living,No Impairment,Assistive Device,Moderate,2-3,Moderate,Informal Only,Moderate,Medium,None,Neutral,Intermediate,None,None,Low,Advanced,0,0,0,9,4,1
+37,65-74,Medium,Independent Living,MCI,Independent,Moderate,2-3,None,Both,Isolated,Medium,Reliable,Positive,None,None,None,Medium,Standard,0,0,0,11,4,1
+38,65-74,Medium,Independent Living,MCI,Assistive Device,None,0-1,Moderate,Informal Only,Active,Medium,Limited,Neutral,Intermediate,Limited,Readily Available,Low,Simple,0,0,1,10,2,0
+39,75-84,Medium,Assisted Living,No Impairment,Assistive Device,Mild,0-1,None,Informal Only,Isolated,Low,Limited,Positive,None,None,None,High,Simple,0,0,0,10,2,0
+40,65-74,High,Independent Living,No Impairment,Independent,None,2-3,None,Informal Only,Moderate,Medium,Reliable,Negative,None,Limited,Limited,High,Standard,0,0,0,10,1,1
+41,65-74,High,With Family,No Impairment,Independent,Severe,0-1,None,None,Moderate,Medium,Reliable,Positive,Basic,Extensive,Readily Available,Medium,Standard,0,1,0,12,3,1
+42,75-84,Medium,With Family,No Impairment,Full Assistance,Mild,2-3,None,Informal Only,Moderate,High,Limited,Positive,Basic,None,None,High,Standard,1,0,0,13,4,1
+43,65-74,Medium,With Family,No Impairment,Independent,None,0-1,Mild,None,Moderate,Medium,Reliable,Positive,Intermediate,Limited,Limited,Medium,Standard,0,0,0,13,0,1
+44,85+,Medium,Independent Living,No Impairment,Independent,Mild,2-3,Mild,Both,Active,Medium,Reliable,Positive,Intermediate,Limited,Limited,Medium,Simple,0,0,1,13,2,1
+45,65-74,Medium,Independent Living,No Impairment,Assistive Device,Mild,0-1,None,None,Isolated,High,Limited,Positive,Intermediate,Moderate,Readily Available,Low,Standard,0,1,0,12,2,0
+46,75-84,Low,With Family,No Impairment,Full Assistance,None,4+,Moderate,Informal Only,Isolated,Medium,Reliable,Neutral,Basic,None,Limited,High,Standard,0,0,0,12,4,1
+47,65-74,Medium,Independent Living,No Impairment,Full Assistance,None,2-3,None,None,Isolated,Low,Reliable,Negative,Basic,Limited,Readily Available,Low,Simple,0,1,0,8,3,0
+48,75-84,Medium,With Family,No Impairment,Assistive Device,Mild,2-3,Mild,Both,Active,Low,Reliable,Negative,Basic,Moderate,Limited,High,Simple,0,0,1,10,3,0
+49,75-84,Low,With Family,No Impairment,Independent,Mild,4+,Moderate,Informal Only,Active,High,Reliable,Positive,Advanced,Moderate,None,High,Standard,1,0,1,16,3,1
+50,65-74,Medium,Nursing Home,No Impairment,Independent,Moderate,2-3,Mild,Informal Only,Moderate,Low,Reliable,Neutral,None,Limited,Limited,Medium,Simple,0,0,0,9,3,1
+51,85+,High,Independent Living,No Impairment,Assistive Device,Mild,0-1,None,None,Moderate,High,Reliable,Positive,Intermediate,Limited,Readily Available,Low,Standard,0,1,0,13,2,1
+52,75-84,Low,Independent Living,MCI,Independent,Moderate,2-3,Moderate,Formal Only,Moderate,Medium,Reliable,Neutral,Basic,Limited,Limited,Medium,Simple,0,0,0,11,4,1
+53,85+,Low,Nursing Home,No Impairment,Independent,Mild,2-3,Mild,Informal Only,Isolated,High,Reliable,Negative,Basic,Moderate,Readily Available,Medium,Simple,0,1,0,11,2,0
+54,85+,Medium,Independent Living,No Impairment,Full Assistance,Mild,2-3,None,Both,Active,High,Reliable,Negative,Intermediate,Limited,Readily Available,Medium,Simple,0,1,1,12,4,0
+55,75-84,High,Independent Living,No Impairment,Independent,Moderate,2-3,None,Informal Only,Moderate,High,Reliable,Neutral,Basic,None,Limited,Low,Advanced,0,0,0,11,3,0
+56,85+,Low,Independent Living,No Impairment,Independent,Mild,0-1,Mild,None,Moderate,Medium,Reliable,Neutral,Intermediate,Moderate,Limited,High,Standard,0,0,0,13,1,1
+57,65-74,Medium,With Family,No Impairment,Independent,None,0-1,Mild,None,Moderate,High,Limited,Neutral,Advanced,Limited,Limited,Medium,Advanced,0,0,0,13,0,0
+58,65-74,High,Assisted Living,No Impairment,Independent,None,2-3,Mild,Informal Only,Isolated,Medium,Reliable,Neutral,Basic,Limited,Limited,Medium,Standard,0,0,0,11,1,1
+59,65-74,Low,Independent Living,Dementia,Independent,Moderate,2-3,Moderate,Informal Only,Isolated,Medium,Reliable,Negative,Basic,None,Readily Available,Medium,Simple,0,0,0,10,5,0
+60,65-74,Medium,Independent Living,No Impairment,Independent,Mild,2-3,Mild,None,Moderate,Medium,None,Neutral,Basic,Limited,Readily Available,Medium,Standard,0,1,0,9,2,0
+61,65-74,Medium,Assisted Living,No Impairment,Independent,Mild,2-3,None,Formal Only,Isolated,High,Reliable,Neutral,Advanced,None,Limited,Medium,Standard,0,0,0,14,2,1
+62,65-74,Medium,With Family,No Impairment,Independent,None,4+,None,Informal Only,Moderate,High,None,Positive,None,Limited,Limited,Medium,Standard,0,0,0,10,2,1
+63,75-84,Medium,Independent Living,No Impairment,Assistive Device,None,2-3,None,Informal Only,Isolated,High,Limited,Neutral,Basic,None,Readily Available,High,Simple,1,1,0,12,2,1
+64,65-74,Medium,Independent Living,No Impairment,Independent,None,0-1,Mild,Informal Only,Moderate,Medium,Reliable,Neutral,Basic,Limited,Limited,Medium,Standard,0,0,0,11,0,1
+65,65-74,Low,Nursing Home,Dementia,Full Assistance,None,0-1,None,Informal Only,Moderate,Medium,Limited,Negative,Intermediate,Extensive,Readily Available,High,Simple,0,0,0,11,4,1
+66,75-84,High,Assisted Living,No Impairment,Independent,Mild,0-1,Mild,Informal Only,Moderate,Medium,Reliable,Negative,None,None,Limited,High,Simple,0,0,0,10,1,0
+67,65-74,Medium,Assisted Living,Dementia,Independent,None,0-1,Mild,None,Moderate,Low,Reliable,Neutral,Intermediate,Extensive,Readily Available,Low,Standard,0,0,0,10,2,0
+68,75-84,Low,Assisted Living,Dementia,Assistive Device,Mild,0-1,Moderate,None,Moderate,Low,Reliable,Neutral,Advanced,Limited,None,High,Standard,0,0,0,13,4,0
+69,65-74,Low,Independent Living,No Impairment,Independent,Moderate,0-1,None,Both,Moderate,Medium,None,Neutral,None,Moderate,Limited,Low,Simple,0,0,0,7,2,0
+70,85+,Medium,Independent Living,No Impairment,Full Assistance,None,0-1,Moderate,Both,Moderate,Low,Limited,Neutral,None,Moderate,Limited,High,Simple,0,0,0,9,2,0
+71,75-84,Medium,Nursing Home,No Impairment,Independent,Mild,0-1,None,Informal Only,Moderate,Low,Reliable,Neutral,Advanced,Limited,Limited,Medium,Standard,0,0,0,12,1,1
+72,65-74,Low,Nursing Home,No Impairment,Full Assistance,Moderate,4+,Moderate,Informal Only,Active,Low,Reliable,Positive,None,Limited,None,High,Standard,0,0,1,11,6,1
+73,65-74,Medium,Nursing Home,No Impairment,Independent,None,0-1,None,Informal Only,Moderate,Low,Reliable,Positive,Intermediate,Moderate,Readily Available,High,Advanced,0,1,0,13,0,1
+74,75-84,Low,With Family,No Impairment,Assistive Device,Mild,2-3,None,Informal Only,Isolated,Low,Limited,Negative,Basic,Limited,Readily Available,High,Advanced,0,1,0,9,3,0
+75,75-84,Medium,Independent Living,No Impairment,Independent,Moderate,2-3,Mild,None,Isolated,High,Reliable,Neutral,None,None,Limited,High,Standard,1,0,0,12,3,1
+76,75-84,Low,Independent Living,No Impairment,Full Assistance,Moderate,4+,None,None,Moderate,Medium,Reliable,Negative,Intermediate,Limited,None,Medium,Simple,0,0,0,11,6,0
+77,75-84,Medium,Assisted Living,MCI,Independent,None,0-1,None,Formal Only,Moderate,Medium,Reliable,Neutral,Basic,Moderate,None,Low,Standard,0,0,0,10,1,0
+78,65-74,Medium,Assisted Living,No Impairment,Independent,Moderate,2-3,Mild,Informal Only,Isolated,Medium,None,Positive,Basic,Moderate,Limited,Medium,Standard,0,0,0,10,3,1
+79,65-74,High,Assisted Living,MCI,Full Assistance,Mild,4+,Mild,None,Moderate,Low,Reliable,Negative,Basic,Moderate,Limited,Low,Simple,0,0,0,8,6,0
+80,65-74,Low,Assisted Living,No Impairment,Independent,None,4+,Mild,Informal Only,Moderate,High,Reliable,Neutral,Basic,Limited,Limited,Medium,Standard,0,0,0,12,2,1
+81,85+,Medium,Nursing Home,No Impairment,Independent,Mild,4+,Mild,Informal Only,Moderate,High,Reliable,Neutral,None,Moderate,Limited,Medium,Simple,0,0,0,11,3,1
+82,75-84,Low,Independent Living,No Impairment,Assistive Device,Severe,0-1,Mild,Informal Only,Active,Low,Limited,Positive,Basic,None,Limited,High,Advanced,0,0,1,11,4,0
+83,65-74,High,Independent Living,No Impairment,Independent,Mild,0-1,None,None,Isolated,Medium,Reliable,Neutral,Advanced,Limited,Limited,Medium,Standard,0,0,0,13,1,1
+84,65-74,High,Independent Living,MCI,Independent,None,2-3,None,None,Isolated,High,Reliable,Negative,Basic,None,Limited,High,Standard,1,0,0,12,2,0
+85,65-74,Medium,Independent Living,MCI,Independent,Mild,4+,None,Formal Only,Moderate,High,None,Neutral,Intermediate,None,Readily Available,Low,Standard,0,0,0,10,4,1
+86,65-74,Medium,Independent Living,MCI,Full Assistance,None,2-3,Moderate,None,Moderate,Medium,Reliable,Neutral,Basic,None,None,High,Advanced,0,0,0,12,4,1
+87,75-84,High,Independent Living,No Impairment,Independent,None,2-3,Mild,Informal Only,Moderate,Medium,Reliable,Negative,Intermediate,None,Readily Available,High,Standard,0,1,0,12,1,1
+88,75-84,Medium,Independent Living,No Impairment,Independent,None,0-1,None,Informal Only,Moderate,Low,None,Neutral,None,Limited,Limited,Medium,Standard,0,0,0,7,0,0
+89,85+,Medium,Independent Living,MCI,Full Assistance,None,4+,None,None,Isolated,High,Limited,Negative,Advanced,None,Limited,Medium,Simple,0,0,0,12,5,1
+90,75-84,Low,Independent Living,MCI,Assistive Device,None,0-1,Moderate,Informal Only,Active,Low,Reliable,Negative,Basic,Limited,Readily Available,High,Standard,0,0,1,10,2,1
+91,65-74,Low,Independent Living,Dementia,Independent,None,2-3,None,Formal Only,Active,High,None,Neutral,None,None,Readily Available,Low,Simple,0,0,1,8,3,0
+92,75-84,High,Independent Living,No Impairment,Independent,Mild,2-3,Mild,Both,Moderate,Medium,Reliable,Negative,None,None,Readily Available,Medium,Standard,0,1,0,9,2,1
+93,75-84,High,Nursing Home,No Impairment,Independent,None,2-3,Mild,Both,Moderate,Medium,Limited,Neutral,None,None,None,Medium,Standard,0,0,0,9,1,0
+94,75-84,Medium,Independent Living,MCI,Independent,None,0-1,Mild,Informal Only,Moderate,Medium,Reliable,Neutral,Basic,None,None,Low,Standard,0,0,0,10,1,0
+95,75-84,Medium,Independent Living,No Impairment,Independent,Moderate,0-1,None,Informal Only,Moderate,Low,None,Positive,Basic,Limited,Readily Available,Medium,Simple,0,1,0,9,2,1
+96,75-84,Medium,Independent Living,Dementia,Independent,Mild,2-3,Moderate,Informal Only,Isolated,Low,Reliable,Neutral,Intermediate,Limited,Limited,Low,Simple,0,0,0,10,4,0
+97,75-84,Medium,Assisted Living,MCI,Independent,Mild,0-1,Moderate,Informal Only,Active,Low,Reliable,Negative,Basic,Limited,Limited,Low,Standard,0,0,1,8,2,0
+98,65-74,High,Independent Living,No Impairment,Independent,None,2-3,Mild,Both,Isolated,Low,Reliable,Negative,None,Limited,None,Low,Simple,0,0,0,7,1,0
+99,65-74,High,Assisted Living,MCI,Full Assistance,None,0-1,Mild,None,Active,High,Reliable,Neutral,Basic,None,None,High,Simple,1,0,0,13,3,1
+100,65-74,High,Independent Living,MCI,Full Assistance,None,2-3,Moderate,None,Moderate,Medium,None,Positive,Intermediate,Moderate,Readily Available,Medium,Simple,0,0,0,11,4,0
