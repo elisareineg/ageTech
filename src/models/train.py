@@ -1,5 +1,5 @@
 """
-Model Training Module for AgeTech Adoption Prediction
+Model Training for AgeTech
 
 This module implements multiple ML models with hyperparameter tuning:
 - Gradient Boosting (XGBoost) - Primary model

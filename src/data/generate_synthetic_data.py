@@ -200,7 +200,7 @@ class AgeTechDataGenerator:
     def _generate_adoption_outcome(self, df: pd.DataFrame) -> List[int]:
         """Generate adoption outcome based on key predictors with realistic probabilities."""
         
-        # Base adoption probability
+        # Base adoption probability based off references/research
         base_prob = 0.35  # Realistic adoption rate
         
         adoption_probs = []

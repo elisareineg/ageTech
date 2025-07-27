@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore')
 
 class AgeTechPreprocessor:
     """
-    Comprehensive preprocessing pipeline for AgeTech adoption data.
+    Comprehensive preprocessing pipeline for AgeTech adoption data. Cleans and splits data before engineering features.
     """
     
     def __init__(self, random_state: int = 42):
@@ -167,7 +167,7 @@ class AgeTechPreprocessor:
     def prepare_features_and_target(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
         """Prepare features and target variables."""
         
-        # Remove ID column
+        # Remove ID column as it is not a feature
         if 'participant_id' in df.columns:
             df = df.drop('participant_id', axis=1)
         
@@ -195,7 +195,7 @@ class AgeTechPreprocessor:
             ('scaler', StandardScaler())
         ])
         
-        # Combine transformers
+        # Combine 
         preprocessor = ColumnTransformer(
             transformers=[
                 ('cat', categorical_transformer, self.categorical_features),

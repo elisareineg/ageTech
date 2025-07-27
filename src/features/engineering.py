@@ -1,7 +1,7 @@
 """
-Advanced Feature Engineering for AgeTech Adoption Prediction
+Feature Engineering for AgeTech Adoption Prediction
 
-This module implements sophisticated feature engineering techniques including:
+This module implements feature engineering techniques including:
 - Composite scoring for digital literacy and technology readiness
 - Interaction terms between top predictors
 - Technology readiness indices
