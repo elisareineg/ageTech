@@ -143,10 +143,6 @@ This orchestrates:
    - **Visualizations**: Data types summary, missing values count, first 5 rows of data
    - **Output**: Shape, data types, missing values, sample data
 
-  - Sample Dataset:
-
-    <img width="1150" height="283" alt="Screenshot 2025-08-23 at 3 32 08 PM" src="https://github.com/user-attachments/assets/1a5569b0-1d6f-481b-9bc1-47c1a0444cab" />
-
 
    **Cell 4: Target Variable Analysis**
 
