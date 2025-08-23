@@ -12,6 +12,161 @@ This project develops a machine learning model to predict AgeTech adoption succe
   - What predictive factors emerge in real-world data not captured in synthetic datasets?
   - How do prediction accuracy rates compare between different AgeTech device categories?
 
+## Getting Started
+
+### Quick Start Guide
+
+1. **Install Dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Run the Complete Pipeline**
+
+   ```bash
+   python run_pipeline.py
+   ```
+
+3. **View Data Visualizations**
+   ```bash
+   jupyter notebook --no-browser --port=8888 --ip=0.0.0.0 --allow-root
+   ```
+   Then open your browser to: `http://127.0.0.1:8888/tree?token=[YOUR_TOKEN]`
+
+### Detailed Pipeline Execution
+
+#### Step 1: Run the Pipeline
+
+The main pipeline orchestrates the entire ML workflow:
+
+```bash
+python run_pipeline.py
+```
+
+This executes:
+
+1. **Synthetic Data Generation** - Creates 500-person dataset with realistic AgeTech adoption patterns
+2. **Data Preprocessing** - Cleans and transforms the data for ML models
+3. **Feature Engineering** - Creates advanced features and composite scores
+4. **Model Training** - Trains multiple ML models (XGBoost, LightGBM, Random Forest, etc.)
+5. **Model Evaluation** - Assesses performance across different metrics and subgroups
+6. **Model Interpretability** - Generates SHAP analysis for feature importance
+7. **Data Visualization** - Prepares Jupyter notebook for exploration
+
+#### Step 2: Access Jupyter Notebook Visualizations
+
+1. **Start Jupyter Server**
+
+   ```bash
+   jupyter notebook --no-browser --port=8888 --ip=0.0.0.0 --allow-root
+   ```
+
+2. **Open Browser**
+
+   - Copy the URL from terminal output (looks like: `http://127.0.0.1:8888/tree?token=...`)
+   - Navigate to the `notebooks` folder
+   - Click on `01_data_exploration.ipynb`
+
+3. **Trust the Notebook**
+   - If prompted, click "Trust" to allow execution
+   - This is normal for newly created notebooks
+
+#### Step 3: Run Visualization Cells
+
+The notebook contains 8 cells that generate comprehensive visualizations:
+
+**Cell 1: Library Import**
+
+- Imports pandas, numpy, matplotlib, seaborn
+- Sets up plotting styles and configurations
+- **Output**: "Libraries imported successfully!"
+
+**Cell 2: Data Loading**
+
+- Loads the synthetic dataset from `data/raw/agetch_synthetic_data_[TIMESTAMP].csv`
+- **Output**: Dataset shape, column names, confirmation of successful loading
+
+**Cell 3: Dataset Overview**
+
+- Shows basic dataset information
+- **Visualizations**:
+  - Data types summary
+  - Missing values count
+  - First 5 rows of data
+- **Output**: Shape, data types, missing values, sample data
+
+**Cell 4: Target Variable Analysis**
+
+- Analyzes the binary adoption success outcome
+- **Visualizations**:
+  - **Pie Chart**: Adoption success distribution (e.g., 56.2% success vs 43.8% non-adoption)
+  - **Bar Chart**: Count of adopters vs non-adopters
+- **Output**: Adoption rate percentage and distribution statistics
+
+**Cell 5: Demographic Analysis**
+
+- Explores demographic factors and their relationship to adoption
+- **Visualizations** (6 charts total):
+  - **Top Row**: Distribution charts for age groups, socioeconomic status, living situation
+  - **Bottom Row**: Adoption success rates for each demographic group
+- **Key Insights**: Which demographic groups are most likely to adopt AgeTech
+
+**Cell 6: Technology Readiness Analysis**
+
+- Examines technology-related factors and their impact on adoption
+- **Visualizations** (6 charts total):
+  - **Top Row**: Distribution of digital literacy, internet access, willingness to use new technology
+  - **Bottom Row**: Adoption success rates for each technology readiness level
+- **Key Insights**: How tech skills and attitudes affect adoption success
+
+**Cell 7: Correlation Analysis**
+
+- Shows relationships between all variables
+- **Visualizations**:
+  - **Heatmap**: Correlation matrix with color-coded relationships
+  - **Top Correlations**: List of variables most strongly correlated with adoption success
+- **Key Insights**: Which factors most strongly predict AgeTech adoption
+
+**Cell 8: Key Findings Summary**
+
+- Synthesizes the most important predictive factors
+- **Visualizations**:
+  - **Bar Chart**: Top 5 predictors of AgeTech adoption success
+- **Output**: Summary of key findings and recommendations
+
+### Alternative: Quick Data Analysis
+
+For a quick overview without Jupyter, run:
+
+```bash
+python run_analysis.py
+```
+
+This provides:
+
+- Overall adoption rate
+- Highest adoption rates by demographic groups
+- Key predictive factors
+- Dataset quality metrics
+
+### Understanding the Results
+
+#### What the Visualizations Show:
+
+- **Adoption Patterns**: How different groups adopt AgeTech
+- **Predictive Factors**: Which variables most strongly influence adoption
+- **Demographic Insights**: Age, socioeconomic, and living situation effects
+- **Technology Barriers**: Digital literacy and tech readiness impacts
+- **Correlation Strength**: Statistical relationships between variables
+
+#### Key Metrics to Look For:
+
+- **Overall Adoption Rate**: Typically 50-60% in synthetic data
+- **Top Predictors**: Usually digital literacy, willingness to use tech, cognitive status
+- **Demographic Variations**: Different adoption rates across age groups and socioeconomic levels
+- **Technology Readiness**: Clear relationship between tech skills and adoption success
+
 ## Dataset Structure
 
 The synthetic dataset includes 500 individuals with 18 variables across four domains:
