@@ -143,11 +143,21 @@ This orchestrates:
    - **Visualizations**: Data types summary, missing values count, first 5 rows of data
    - **Output**: Shape, data types, missing values, sample data
 
+  - Sample Dataset:
+
+    <img width="1150" height="283" alt="Screenshot 2025-08-23 at 3 32 08 PM" src="https://github.com/user-attachments/assets/1a5569b0-1d6f-481b-9bc1-47c1a0444cab" />
+
+
    **Cell 4: Target Variable Analysis**
 
    - Analyzes the binary adoption success outcome
    - **Visualizations**: Pie chart and bar chart of adoption success distribution
    - **Output**: Adoption rate percentage and distribution statistics
+
+   - Target Variable Analysis Based Off Sample Synthetic Dataset:
+
+  <img width="1138" height="622" alt="Screenshot 2025-08-23 at 3 33 24 PM" src="https://github.com/user-attachments/assets/a6c110ef-46c9-4730-97e8-ace543fb4935" />
+
 
    **Cell 5: Demographic Analysis**
 
@@ -155,23 +165,44 @@ This orchestrates:
    - **Visualizations**: 6 charts showing age groups, socioeconomic status, living situation distributions and adoption rates
    - **Key Insights**: Which demographic groups are most likely to adopt AgeTech
 
+   - Demographic Analysis Based Off Sample Synthetic Dataset 
+
+     <img width="1208" height="642" alt="Screenshot 2025-08-23 at 3 33 55 PM" src="https://github.com/user-attachments/assets/b63a51d3-a7fc-4893-b5af-8c94a9062985" />
+
+
    **Cell 6: Technology Readiness Analysis**
 
    - Examines technology-related factors and their impact on adoption
    - **Visualizations**: 6 charts showing digital literacy, internet access, willingness to use new technology
    - **Key Insights**: How tech skills and attitudes affect adoption success
 
+   - Technology Readiness Analysis Based Off Sample Synthetic Dataset:
+   - 
+     <img width="965" height="629" alt="Screenshot 2025-08-23 at 3 37 37 PM" src="https://github.com/user-attachments/assets/8fb43950-e0ef-4d59-a85d-b30e2445e845" />
+
+
    **Cell 7: Correlation Analysis**
 
    - Shows relationships between all variables
    - **Visualizations**: Heatmap correlation matrix and top correlations list
    - **Key Insights**: Which factors most strongly predict AgeTech adoption
+   
+   - Correlation Matrix/Heatmap Based Off Sample Synthetic Data:
+   - 
+    <img width="810" height="673" alt="Screenshot 2025-08-23 at 3 38 41 PM" src="https://github.com/user-attachments/assets/ffb2a7e7-9976-438d-b8e2-d420217edb19" />
+
 
    **Cell 8: Key Findings Summary**
 
    - Synthesizes the most important predictive factors
    - **Visualizations**: Bar chart of top 5 predictors of AgeTech adoption success
    - **Output**: Summary of key findings and recommendations
+
+   - Key Findings Graph Based Off Sample Synthetic Data:
+     
+     <img width="956" height="640" alt="Screenshot 2025-08-23 at 3 40 09 PM" src="https://github.com/user-attachments/assets/9d548f3e-0b45-4728-b819-6626500987ec" />
+
+The visualization graphs will vary based off the synthetic data generated.
 
 ### Alternative: Quick Data Analysis
 
