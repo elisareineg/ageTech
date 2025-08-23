@@ -153,29 +153,25 @@ This orchestrates:
 
    <img width="909" height="427" alt="Screenshot 2025-08-23 at 4 27 35 PM" src="https://github.com/user-attachments/assets/09ade9ad-5054-4ad6-8715-d0764cb8e698" />
 
-
    **Cell 5: Demographic Analysis**
 
    - Explores demographic factors and their relationship to adoption
    - **Visualizations**: 6 charts showing age groups, socioeconomic status, living situation distributions and adoption rates
    - **Key Insights**: Which demographic groups are most likely to adopt AgeTech
-  
+
    **Demographic Analysis Based Off Sample Dataset**
 
    <img width="942" height="594" alt="Screenshot 2025-08-23 at 4 28 15 PM" src="https://github.com/user-attachments/assets/78a983e8-69cd-493e-9b5a-8e3c1ee71b76" />
-
 
    **Cell 6: Technology Readiness Analysis**
 
    - Examines technology-related factors and their impact on adoption
    - **Visualizations**: 6 charts showing digital literacy, internet access, willingness to use new technology
    - **Key Insights**: How tech skills and attitudes affect adoption success
-  
+
    **Technology Readiness Analysis Based Off Sample Dataset:**
 
    <img width="900" height="626" alt="Screenshot 2025-08-23 at 4 29 00 PM" src="https://github.com/user-attachments/assets/1fd37744-8ef7-4f2f-8e95-35923fd3f7f9" />
-
-
 
    **Cell 7: Correlation Analysis**
 
@@ -202,26 +198,20 @@ This orchestrates:
    - **Better colors**: Clearer contrast for positive/negative correlations
    - **Clean table**: Top 10 correlations clearly ranked and listed
    - **Key insights**: Focuses on the relationships that matter most
-     
-  
+
    **Example Focused Heatmap:**
 
-
    <img width="1204" height="842" alt="Screenshot 2025-08-23 at 4 21 54 PM" src="https://github.com/user-attachments/assets/ac8acc89-ea49-41ce-8767-aa922da5948b" />
-
-   
 
    **Cell 8: Key Findings Summary**
 
    - Synthesizes the most important predictive factors
    - **Visualizations**: Bar chart of top 5 predictors of AgeTech adoption success
    - **Output**: Summary of key findings and recommendations
-  
+
    **Key Findings Summary Based Off Sample Dataset:**
 
    <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
-
-
 
 ### Alternative: Quick Data Analysis
 
@@ -237,6 +227,37 @@ This provides:
 - Highest adoption rates by demographic groups
 - Key predictive factors
 - Dataset quality metrics
+
+### Model Accuracy Testing
+
+To test the actual accuracy of the AgeTech adoption prediction model, run:
+
+```bash
+python test_accuracy.py
+```
+
+This comprehensive test provides:
+
+- **Multiple Model Comparison**: Random Forest, Gradient Boosting, Logistic Regression
+- **Complete Metrics**: Accuracy, Precision, Recall, F1-Score, AUC-ROC
+- **Cross-Validation**: 5-fold cross-validation for robust performance assessment
+- **Feature Importance**: Top 10 most important predictors
+- **Detailed Classification Report**: Per-class performance breakdown
+- **Accuracy Verification**: Comparison against performance claims
+
+#### What the Accuracy Test Shows:
+
+- **Model Performance**: Actual accuracy rates for each algorithm
+- **Best Model Identification**: Which algorithm performs best
+- **Feature Rankings**: Which factors most strongly predict adoption
+- **Performance Validation**: Realistic assessment of model capabilities
+- **Statistical Robustness**: Cross-validation results and confidence intervals
+
+#### Expected Results:
+
+- **Best Model**: Usually Random Forest or Gradient Boosting
+- **Top Predictors**: Technology readiness index, willingness to use tech, cognitive status
+- **Balanced Performance**: Good precision and recall balance
 
 ### Understanding the Results
 
