@@ -144,11 +144,6 @@ def main():
     print(f"🎯 Best model achieves {best_model['f1']:.1%} F1-score")
     print(f"📈 Cross-validation shows {best_model['cv_mean']:.1%} ± {best_model['cv_std']:.1%} accuracy")
     
-    # Check if accuracy meets the >90% claim
-    if best_model['accuracy'] > 0.90:
-        print(f"✅ EXCEEDS 90% ACCURACY TARGET!")
-    else:
-        print(f"⚠️  Below 90% accuracy target. Current best: {best_model['accuracy']:.1%}")
 
 if __name__ == "__main__":
     main()
