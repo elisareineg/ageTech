@@ -167,7 +167,11 @@ This orchestrates:
    - **Visualizations**: Heatmap correlation matrix and top correlations list
    - **Key Insights**: Which factors most strongly predict AgeTech adoption
 
-   **Alternative: Improved Correlation Matrix**
+   **Example Correlation Heatmap:**
+
+   <img width="810" height="673" alt="Example Correlation Heatmap" src="https://github.com/user-attachments/assets/ffb2a7e7-9976-438d-b8e2-d420217edb19" />
+
+   **Alternative: Focused Correlation Matrix**
 
    For a more organized and readable correlation matrix, run:
 
@@ -182,16 +186,21 @@ This orchestrates:
    - **Better colors**: Clearer contrast for positive/negative correlations
    - **Clean table**: Top 10 correlations clearly ranked and listed
    - **Key insights**: Focuses on the relationships that matter most
+     
+  
+   **Example Focused Heatmap:**
 
-   **Example Correlation Heatmap:**
 
-   <img width="810" height="673" alt="Example Correlation Heatmap" src="https://github.com/user-attachments/assets/ffb2a7e7-9976-438d-b8e2-d420217edb19" />
+   <img width="1204" height="842" alt="Screenshot 2025-08-23 at 4 21 54 PM" src="https://github.com/user-attachments/assets/ac8acc89-ea49-41ce-8767-aa922da5948b" />
+
+   
 
    **Cell 8: Key Findings Summary**
 
    - Synthesizes the most important predictive factors
    - **Visualizations**: Bar chart of top 5 predictors of AgeTech adoption success
    - **Output**: Summary of key findings and recommendations
+
 
 ### Alternative: Quick Data Analysis
 
