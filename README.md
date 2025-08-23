@@ -149,17 +149,33 @@ This orchestrates:
    - **Visualizations**: Pie chart and bar chart of adoption success distribution
    - **Output**: Adoption rate percentage and distribution statistics
 
+   **Target Variable Analysis Based Off Sample Dataset:**
+
+   <img width="909" height="427" alt="Screenshot 2025-08-23 at 4 27 35 PM" src="https://github.com/user-attachments/assets/09ade9ad-5054-4ad6-8715-d0764cb8e698" />
+
+
    **Cell 5: Demographic Analysis**
 
    - Explores demographic factors and their relationship to adoption
    - **Visualizations**: 6 charts showing age groups, socioeconomic status, living situation distributions and adoption rates
    - **Key Insights**: Which demographic groups are most likely to adopt AgeTech
+  
+   **Demographic Analysis Based Off Sample Dataset**
+
+   <img width="942" height="594" alt="Screenshot 2025-08-23 at 4 28 15 PM" src="https://github.com/user-attachments/assets/78a983e8-69cd-493e-9b5a-8e3c1ee71b76" />
+
 
    **Cell 6: Technology Readiness Analysis**
 
    - Examines technology-related factors and their impact on adoption
    - **Visualizations**: 6 charts showing digital literacy, internet access, willingness to use new technology
    - **Key Insights**: How tech skills and attitudes affect adoption success
+  
+   **Technology Readiness Analysis Based Off Sample Dataset:**
+
+   <img width="900" height="626" alt="Screenshot 2025-08-23 at 4 29 00 PM" src="https://github.com/user-attachments/assets/1fd37744-8ef7-4f2f-8e95-35923fd3f7f9" />
+
+
 
    **Cell 7: Correlation Analysis**
 
@@ -200,6 +216,11 @@ This orchestrates:
    - Synthesizes the most important predictive factors
    - **Visualizations**: Bar chart of top 5 predictors of AgeTech adoption success
    - **Output**: Summary of key findings and recommendations
+  
+   **Key Findings Summary Based Off Sample Dataset:**
+
+   <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
+
 
 
 ### Alternative: Quick Data Analysis
