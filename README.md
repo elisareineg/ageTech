@@ -167,6 +167,22 @@ This orchestrates:
    - **Visualizations**: Heatmap correlation matrix and top correlations list
    - **Key Insights**: Which factors most strongly predict AgeTech adoption
 
+   **Alternative: Improved Correlation Matrix**
+
+   For a more organized and readable correlation matrix, run:
+
+   ```bash
+   python better_correlation.py
+   ```
+
+   This provides:
+
+   - **Focused heatmap**: Shows only the top 8 most important predictors
+   - **Larger text**: Easier to read correlation values
+   - **Better colors**: Clearer contrast for positive/negative correlations
+   - **Clean table**: Top 10 correlations clearly ranked and listed
+   - **Key insights**: Focuses on the relationships that matter most
+
    **Cell 8: Key Findings Summary**
 
    - Synthesizes the most important predictive factors
