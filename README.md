@@ -278,30 +278,6 @@ This orchestrates:
 
    <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
 
-### Model Deployment (Production)
-
-When ready to deploy the trained model to production, use the deployment module:
-
-```bash
-python src/implementation/model_deployment.py
-```
-
-This creates production-ready deployment files:
-
-- **API Specification** (`api_spec.json`) - OpenAPI documentation for REST endpoints
-- **Dockerfile** - Container configuration for deployment
-- **Docker Compose** (`docker-compose.yml`) - Multi-service deployment setup
-- **Deployment Config** (`deployment_config.json`) - Production settings
-
-The deployment module provides:
-
-- **REST API endpoints** for single and batch predictions
-- **Model health monitoring** and performance tracking
-- **Production logging** and error handling
-- **Containerized deployment** with Docker
-
-**Note**: Run the main pipeline first to ensure trained models exist before deployment.
-
 ### Alternative: Quick Data Analysis
 
 For a quick overview without Jupyter, run:
@@ -382,3 +358,20 @@ This provides:
 - Clinical decision support tool development
 - Economic evaluation and cost-effectiveness analysis
 - Model expansion with additional predictive variables
+
+### Model Deployment (Production)
+
+When ready to deploy the trained model to production, use the deployment module:
+
+```bash
+python src/implementation/model_deployment.py
+```
+
+This creates production-ready deployment files:
+
+- **API Specification** (`api_spec.json`) - OpenAPI documentation for REST endpoints
+- **Dockerfile** - Container configuration for deployment
+- **Docker Compose** (`docker-compose.yml`) - Multi-service deployment setup
+- **Deployment Config** (`deployment_config.json`) - Production settings
+
+**Note**: Run the main pipeline first to ensure trained models exist before deployment.
