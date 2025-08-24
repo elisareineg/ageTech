@@ -5,28 +5,28 @@ Model Performance Comparison:
 ----------------------------------------
 Model                Accuracy   Precision  Recall     F1 Score  
 ----------------------------------------------------------------------
-random_forest        85.3%      87.0%      87.0%      87.0%     
-gradient_boosting    96.2%      95.4%      98.0%      96.7%     
-logistic_regression  71.3%      75.6%      72.3%      73.9%     
+random_forest        81.8%      84.5%      82.7%      83.6%     
+gradient_boosting    90.8%      89.5%      94.7%      92.0%     
+logistic_regression  73.2%      77.6%      73.8%      75.6%     
 
 Best Model: gradient_boosting
 
 Validation Set Performance:
 ------------------------------
-Accuracy: 96.2%
-Precision: 95.4%
-Recall: 98.0%
-F1 Score: 96.7%
+Accuracy: 90.8%
+Precision: 89.5%
+Recall: 94.7%
+F1 Score: 92.0%
 
 Top 10 Most Important Features:
 ------------------------------
-technology_readiness_index: 0.1296
-willingness_new_tech: 0.0970
-cognitive_status: 0.0834
-health_risk_score: 0.0772
-previous_tech_use: 0.0734
-attitude_toward_technology: 0.0714
-caregiver_support: 0.0713
-digital_literacy: 0.0696
-tech_readiness_score: 0.0653
-device_preferences: 0.0624
+num__technology_readiness_index: 0.2915
+cat__willingness_new_tech_Low: 0.0903
+cat__device_preferences_Standard: 0.0846
+cat__cognitive_status_No Impairment: 0.0784
+cat__digital_literacy_Low: 0.0777
+cat__tech_assistance_availability_Readily Available: 0.0622
+cat__social_support_score_missing: 0.0595
+cat__social_support_score_4.0: 0.0583
+cat__cognitive_status_MCI: 0.0461
+cat__tech_assistance_availability_missing: 0.0437

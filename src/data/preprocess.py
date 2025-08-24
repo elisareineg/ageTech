@@ -180,6 +180,23 @@ class AgeTechPreprocessor:
         
         return X, y
     
+    def clean_data_types(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Clean data types to ensure categorical columns are strings."""
+        
+        X_clean = X.copy()
+        
+        # Convert all categorical columns to string type
+        for col in X_clean.columns:
+            if X_clean[col].dtype == 'object' or col in self.categorical_features:
+                # Fill NaN values with 'missing' and convert to string
+                X_clean[col] = X_clean[col].fillna('missing').astype(str)
+            elif X_clean[col].dtype in ['float64', 'int64']:
+                # Fill NaN values with median for numerical columns
+                median_val = X_clean[col].median()
+                X_clean[col] = X_clean[col].fillna(median_val)
+        
+        return X_clean
+    
     def create_preprocessing_pipeline(self) -> Pipeline:
         """Create sklearn preprocessing pipeline."""
         
@@ -207,25 +224,25 @@ class AgeTechPreprocessor:
         return preprocessor
     
     def split_data(self, X: pd.DataFrame, y: pd.Series, 
-                   test_size: float = 0.0, val_size: float = 0.2) -> Tuple:
-        """Split data into train and validation sets (no test set)."""
+                   test_size: float = 0.2, val_size: float = 0.0) -> Tuple:
+        """Split data into train and test sets (80-20 split with stratification)."""
         
-        # Use entire dataset for training and validation
+        # Use 80-20 train-test split as per technical implementation
         print(f"Using full dataset: {X.shape[0]} samples")
         print(f"Class distribution: {y.value_counts(normalize=True)}")
         
-        # Split into train and validation only
-        X_train, X_val, y_train, y_val = train_test_split(
-            X, y, test_size=val_size, random_state=self.random_state,
+        # Split into train and test (80-20)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=self.random_state,
             stratify=y
         )
         
-        # Create dummy test set (same as validation for compatibility)
-        X_test, y_test = X_val, y_val
+        # Use same data for validation during training (for compatibility)
+        X_val, y_val = X_train, y_train
         
         print(f"Train set: {X_train.shape[0]} samples")
-        print(f"Validation set: {X_val.shape[0]} samples")
-        print(f"Test set: {X_test.shape[0]} samples (same as validation)")
+        print(f"Test set: {X_test.shape[0]} samples")
+        print(f"Validation set: {X_val.shape[0]} samples (same as train for CV)")
         
         return X_train, X_val, X_test, y_train, y_val, y_test
     
@@ -272,6 +289,9 @@ class AgeTechPreprocessor:
         # 5. Prepare features and target
         X, y = self.prepare_features_and_target(df)
         
+        # 5.5. Clean data types before splitting
+        X = self.clean_data_types(X)
+        
         # 6. Split data
         X_train, X_val, X_test, y_train, y_val, y_test = self.split_data(X, y)
         
@@ -284,12 +304,28 @@ class AgeTechPreprocessor:
         X_val_processed = preprocessor.transform(X_val)
         X_test_processed = preprocessor.transform(X_test)
         
+        # Convert to dense arrays if they're sparse
+        if hasattr(X_train_processed, 'toarray'):
+            X_train_processed = X_train_processed.toarray()
+        if hasattr(X_val_processed, 'toarray'):
+            X_val_processed = X_val_processed.toarray()
+        if hasattr(X_test_processed, 'toarray'):
+            X_test_processed = X_test_processed.toarray()
+        
         # 9. Get feature names
         feature_names = []
         if hasattr(preprocessor, 'get_feature_names_out'):
             feature_names = preprocessor.get_feature_names_out()
+            # Ensure feature names match the actual output shape
+            if len(feature_names) != X_train_processed.shape[1]:
+                print(f"Warning: Feature names count ({len(feature_names)}) doesn't match output shape ({X_train_processed.shape[1]})")
+                feature_names = [f"feature_{i}" for i in range(X_train_processed.shape[1])]
         else:
+            # Create feature names based on actual output shape
             feature_names = [f"feature_{i}" for i in range(X_train_processed.shape[1])]
+        
+        print(f"Preprocessed data shape: {X_train_processed.shape}")
+        print(f"Feature names count: {len(feature_names)}")
         
         # 10. Convert back to DataFrames
         X_train_df = pd.DataFrame(X_train_processed, columns=feature_names)
@@ -333,8 +369,12 @@ def main():
         print("No CSV files found in raw data directory. Please generate synthetic data first.")
         return
     
-    # Use the most recent file
-    latest_file = sorted(data_files)[-1]
+    # Use the most recent synthetic data file (not demo)
+    synthetic_files = [f for f in data_files if 'agetch_synthetic_data' in f and 'demo' not in f]
+    if synthetic_files:
+        latest_file = sorted(synthetic_files)[-1]
+    else:
+        latest_file = sorted(data_files)[-1]
     input_filepath = os.path.join(raw_data_dir, latest_file)
     
     print(f"Processing file: {input_filepath}")

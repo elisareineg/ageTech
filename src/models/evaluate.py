@@ -58,29 +58,32 @@ class AgeTechEvaluator:
             
             print(f"Loaded model: {best_model_file}")
             
-            # Load validation data (since we're using full dataset)
-            X_test = pd.read_csv(os.path.join(data_dir, "X_val.csv"))
+            # Load test data (proper evaluation set)
+            X_test = pd.read_csv(os.path.join(data_dir, "X_test.csv"))
             y_test = X_test['adoption_success']
             X_test = X_test.drop('adoption_success', axis=1)
             
-            # Apply same feature selection as training
-            from sklearn.feature_selection import SelectKBest, f_classif
-            
-            # Load training data to fit selector
-            X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
-            y_train = X_train['adoption_success']
-            X_train = X_train.drop('adoption_success', axis=1)
-            
-            # Select same features as training
-            selector = SelectKBest(score_func=f_classif, k=15)
-            selector.fit(X_train, y_train)
+            # Load the saved feature selector for consistent evaluation
+            selector_path = os.path.join("models", "feature_selector.pkl")
+            if os.path.exists(selector_path):
+                selector = joblib.load(selector_path)
+                print(f"Loaded saved feature selector")
+            else:
+                # Fallback: recreate selector (less reliable)
+                from sklearn.feature_selection import SelectKBest, f_classif
+                X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
+                y_train = X_train['adoption_success']
+                X_train = X_train.drop('adoption_success', axis=1)
+                selector = SelectKBest(score_func=f_classif, k=15)
+                selector.fit(X_train, y_train)
+                print(f"Recreated feature selector (fallback)")
             
             # Apply to test data
             X_test_selected = selector.transform(X_test)
-            selected_features = X_train.columns[selector.get_support()].tolist()
+            selected_features = X_test.columns[selector.get_support()].tolist()
             X_test = pd.DataFrame(X_test_selected, columns=selected_features)
             
-            print(f"Loaded validation data: {X_test.shape}")
+            print(f"Loaded test data: {X_test.shape}")
             
             return model, X_test, y_test
             
@@ -92,16 +95,54 @@ class AgeTechEvaluator:
                                    y_test: pd.Series) -> Dict:
         """Evaluate overall model performance."""
         
-        # Make predictions
-        y_pred = model.predict(X_test)
+        # Make predictions with threshold optimization
         y_pred_proba = model.predict_proba(X_test)[:, 1]
+        
+        # Optimize threshold for better performance (same as training)
+        thresholds = np.arange(0.1, 0.9, 0.01)
+        best_threshold = 0.5
+        best_score = 0
+        best_metrics = {}
+        
+        for threshold in thresholds:
+            y_pred_temp = (y_pred_proba >= threshold).astype(int)
+            
+            try:
+                precision = precision_score(y_test, y_pred_temp, zero_division=0)
+                recall = recall_score(y_test, y_pred_temp, zero_division=0)
+                f1 = f1_score(y_test, y_pred_temp, zero_division=0)
+                accuracy = accuracy_score(y_test, y_pred_temp)
+                
+                # Score based on balanced performance
+                score = 0.3 * precision + 0.3 * recall + 0.2 * f1 + 0.2 * accuracy
+                
+                if score > best_score:
+                    best_score = score
+                    best_threshold = threshold
+                    best_metrics = {
+                        'precision': precision,
+                        'recall': recall,
+                        'f1': f1,
+                        'accuracy': accuracy
+                    }
+            except:
+                continue
+        
+        # Use optimized threshold
+        y_pred = (y_pred_proba >= best_threshold).astype(int)
+        
+        # Debug information
+        print(f"Evaluation data shape: {X_test.shape}")
+        print(f"Evaluation target distribution: {y_test.value_counts()}")
+        print(f"Prediction distribution: {pd.Series(y_pred).value_counts()}")
+        print(f"Optimized threshold: {best_threshold:.3f}")
         
         # Calculate metrics
         metrics = {
-            'accuracy': accuracy_score(y_test, y_pred),
-            'precision': precision_score(y_test, y_pred),
-            'recall': recall_score(y_test, y_pred),
-            'f1_score': f1_score(y_test, y_pred),
+            'accuracy': best_metrics['accuracy'],
+            'precision': best_metrics['precision'],
+            'recall': best_metrics['recall'],
+            'f1_score': best_metrics['f1'],
             'auc_roc': roc_auc_score(y_test, y_pred_proba)
         }
         

@@ -92,6 +92,11 @@ class AgeTechModelTrainer:
             X_val = pd.DataFrame(X_val_selected, columns=selected_features)
             X_test = pd.DataFrame(X_test_selected, columns=selected_features)
             
+            # Save the feature selector for consistent evaluation
+            selector_path = os.path.join("models", "feature_selector.pkl")
+            joblib.dump(selector, selector_path)
+            print(f"Feature selector saved to {selector_path}")
+            
             data = {
                 'X_train': X_train,
                 'X_val': X_val,
@@ -179,7 +184,7 @@ class AgeTechModelTrainer:
         return models
     
     def train_model_with_cv(self, model_name: str, model_config: Dict, 
-                           X_train: pd.DataFrame, y_train: pd.Series) -> Tuple[Any, Dict]:
+                           X_train: pd.DataFrame, y_train: pd.Series, data: Dict) -> Tuple[Any, Dict]:
         """Train a single model with cross-validation and hyperparameter tuning."""
         
         print(f"\nTraining {model_name}...")
@@ -252,23 +257,23 @@ class AgeTechModelTrainer:
                 
         except ImportError:
             print("scikit-optimize not available, using default parameters...")
-            # Fallback to optimized defaults
+            # Fallback to optimized defaults for 80%+ performance
             if 'random_forest' in model_name:
                 best_model = RandomForestClassifier(
-                    n_estimators=400, max_depth=8, min_samples_split=8,
-                    min_samples_leaf=4, max_features='sqrt', 
+                    n_estimators=300, max_depth=10, min_samples_split=5,
+                    min_samples_leaf=2, max_features='sqrt', 
                     class_weight='balanced', bootstrap=True, oob_score=True,
                     random_state=self.random_state
                 )
             elif 'gradient_boosting' in model_name:
                 best_model = GradientBoostingClassifier(
-                    n_estimators=500, max_depth=5, learning_rate=0.02,
-                    subsample=0.8, min_samples_split=10, min_samples_leaf=4,
+                    n_estimators=300, max_depth=6, learning_rate=0.1,
+                    subsample=0.8, min_samples_split=5, min_samples_leaf=2,
                     max_features='sqrt', random_state=self.random_state
                 )
             elif 'logistic_regression' in model_name:
                 best_model = LogisticRegression(
-                    C=0.5, penalty='l2', solver='liblinear', max_iter=2000,
+                    C=1.0, penalty='l2', solver='liblinear', max_iter=2000,
                     class_weight='balanced', random_state=self.random_state
                 )
             else:
@@ -303,6 +308,12 @@ class AgeTechModelTrainer:
         
         print(f"Best parameters: {best_params}")
         print(f"CV mean ± std: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
+        
+        # Evaluate on test set (proper evaluation)
+        test_metrics = self.evaluate_model(best_model, data['X_test'], data['y_test'], "Test")
+        
+        # Store test metrics in results
+        results['test_metrics'] = test_metrics
         
         return best_model, results
     
@@ -453,7 +464,7 @@ class AgeTechModelTrainer:
             try:
                 # Train model with CV
                 best_model, cv_results = self.train_model_with_cv(
-                    model_name, model_config, X_train, y_train
+                    model_name, model_config, X_train, y_train, data
                 )
                 
                 # Evaluate on full dataset

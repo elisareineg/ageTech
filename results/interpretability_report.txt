@@ -4,166 +4,126 @@ AgeTech Adoption Prediction - Model Interpretability Report
 SHAP Analysis Summary:
 ------------------------------
 Top 10 Most Important Features (SHAP):
- 1. cognitive_status: 0.5109
- 2. willingness_new_tech: 0.4781
- 3. device_preferences: 0.4152
- 4. technology_readiness_index: 0.3692
- 5. attitude_toward_technology: 0.3367
- 6. digital_literacy: 0.3324
- 7. socioeconomic_status: 0.2663
- 8. cognitive_assistance_interaction: 0.2514
- 9. previous_tech_use: 0.2311
-10. caregiver_support: 0.1918
+ 1. cat__cognitive_status_No Impairment: 1.2388
+ 2. num__technology_readiness_index: 0.9704
+ 3. cat__willingness_new_tech_Low: 0.9110
+ 4. cat__device_preferences_Standard: 0.7863
+ 5. cat__social_support_score_4.0: 0.7415
+ 6. cat__tech_assistance_availability_Readily Available: 0.6750
+ 7. cat__digital_literacy_Low: 0.5752
+ 8. cat__digital_willingness_interaction_1: 0.4997
+ 9. cat__cognitive_assistance_interaction_1: 0.4743
+10. cat__tech_assistance_availability_missing: 0.3939
 
 Model-specific Feature Importance:
 ----------------------------------------
 
 Random Forest:
-  - technology_readiness_index: 0.1700
-  - cognitive_status: 0.1034
-  - willingness_new_tech: 0.0970
-  - tech_readiness_score: 0.0822
-  - attitude_toward_technology: 0.0754
+  - num__technology_readiness_index: 0.2739
+  - cat__willingness_new_tech_Low: 0.1045
+  - cat__cognitive_status_No Impairment: 0.1038
+  - cat__device_preferences_Standard: 0.0790
+  - cat__digital_literacy_Low: 0.0738
 
 Gradient Boosting:
-  - technology_readiness_index: 0.1296
-  - willingness_new_tech: 0.0970
-  - cognitive_status: 0.0834
-  - health_risk_score: 0.0772
-  - previous_tech_use: 0.0734
+  - num__technology_readiness_index: 0.2915
+  - cat__willingness_new_tech_Low: 0.0903
+  - cat__device_preferences_Standard: 0.0846
+  - cat__cognitive_status_No Impairment: 0.0784
+  - cat__digital_literacy_Low: 0.0777
 
 Logistic Regression:
-  - digital_willingness_interaction: 1.0314
-  - cognitive_assistance_interaction: 0.6260
-  - cognitive_status: 0.5844
-  - device_preferences: 0.4523
-  - technology_readiness_index: 0.3165
+  - cat__cognitive_status_No Impairment: 1.6498
+  - cat__digital_willingness_interaction_1: 1.3532
+  - cat__tech_assistance_availability_Readily Available: 0.9699
+  - cat__health_risk_score_5.0: 0.9603
+  - cat__willingness_new_tech_Low: 0.9060
 
 Subgroup Analysis:
 --------------------
 
-socioeconomic_status:
-  1.0:
-    Sample size: 124
-    Adoption rate: 52.42%
-    F1 score: 0.9466
-    AUC-ROC: 0.9909
-  2.0:
-    Sample size: 227
-    Adoption rate: 60.79%
-    F1 score: 0.9645
-    AUC-ROC: 0.9952
+cat__cognitive_status_MCI:
   0.0:
-    Sample size: 99
-    Adoption rate: 50.51%
-    F1 score: 1.0000
-    AUC-ROC: 1.0000
-
-cognitive_status:
-  2.0:
-    Sample size: 320
-    Adoption rate: 63.12%
-    F1 score: 0.9660
-    AUC-ROC: 0.9952
-  0.0:
-    Sample size: 40
-    Adoption rate: 30.00%
-    F1 score: 0.9167
-    AUC-ROC: 0.9940
+    Sample size: 84
+    Adoption rate: 54.76%
+    F1 score: 0.6857
+    AUC-ROC: 0.6044
   1.0:
-    Sample size: 90
-    Adoption rate: 43.33%
-    F1 score: 0.9870
-    AUC-ROC: 0.9980
+    Sample size: 16
+    Adoption rate: 62.50%
+    F1 score: 0.5882
+    AUC-ROC: 0.6667
 
-caregiver_support:
-  2.0:
-    Sample size: 242
-    Adoption rate: 56.61%
-    F1 score: 0.9606
-    AUC-ROC: 0.9917
-  0.0:
-    Sample size: 78
-    Adoption rate: 60.26%
-    F1 score: 0.9583
-    AUC-ROC: 0.9973
+cat__cognitive_status_No Impairment:
   1.0:
-    Sample size: 32
-    Adoption rate: 65.62%
-    F1 score: 1.0000
-    AUC-ROC: 1.0000
-  3.0:
-    Sample size: 98
-    Adoption rate: 48.98%
-    F1 score: 0.9792
-    AUC-ROC: 0.9996
-
-digital_literacy:
-  2.0:
-    Sample size: 219
-    Adoption rate: 55.71%
-    F1 score: 0.9680
-    AUC-ROC: 0.9954
+    Sample size: 76
+    Adoption rate: 56.58%
+    F1 score: 0.6931
+    AUC-ROC: 0.5705
   0.0:
-    Sample size: 101
-    Adoption rate: 73.27%
-    F1 score: 0.9933
-    AUC-ROC: 0.9995
-  1.0:
-    Sample size: 130
-    Adoption rate: 43.85%
-    F1 score: 0.9298
-    AUC-ROC: 0.9904
+    Sample size: 24
+    Adoption rate: 54.17%
+    F1 score: 0.5714
+    AUC-ROC: 0.6783
 
-digital_willingness_interaction:
+cat__digital_literacy_Low:
   0.0:
-    Sample size: 425
-    Adoption rate: 53.88%
-    F1 score: 0.9634
-    AUC-ROC: 0.9950
+    Sample size: 74
+    Adoption rate: 62.16%
+    F1 score: 0.7010
+    AUC-ROC: 0.5598
   1.0:
-    Sample size: 25
-    Adoption rate: 96.00%
-    F1 score: 1.0000
-    AUC-ROC: 1.0000
+    Sample size: 26
+    Adoption rate: 38.46%
+    F1 score: 0.5600
+    AUC-ROC: 0.6781
 
-cognitive_assistance_interaction:
-  1.0:
-    Sample size: 108
-    Adoption rate: 70.37%
-    F1 score: 0.9868
-    AUC-ROC: 0.9996
+cat__digital_willingness_interaction_1:
   0.0:
-    Sample size: 342
-    Adoption rate: 51.75%
-    F1 score: 0.9584
-    AUC-ROC: 0.9938
+    Sample size: 97
+    Adoption rate: 54.64%
+    F1 score: 0.6552
+    AUC-ROC: 0.5744
 
-social_support_score:
-  3.0:
-    Sample size: 88
-    Adoption rate: 57.95%
-    F1 score: 0.9615
-    AUC-ROC: 0.9963
-  5.0:
-    Sample size: 49
-    Adoption rate: 61.22%
-    F1 score: 1.0000
-    AUC-ROC: 1.0000
-  4.0:
-    Sample size: 276
-    Adoption rate: 56.16%
-    F1 score: 0.9653
-    AUC-ROC: 0.9948
-  2.0:
-    Sample size: 32
-    Adoption rate: 43.75%
-    F1 score: 0.9630
-    AUC-ROC: 1.0000
+cat__cognitive_assistance_interaction_1:
+  0.0:
+    Sample size: 76
+    Adoption rate: 57.89%
+    F1 score: 0.6667
+    AUC-ROC: 0.6154
+  1.0:
+    Sample size: 24
+    Adoption rate: 50.00%
+    F1 score: 0.6875
+    AUC-ROC: 0.6250
+
+cat__social_support_score_4.0:
+  0.0:
+    Sample size: 79
+    Adoption rate: 54.43%
+    F1 score: 0.6237
+    AUC-ROC: 0.5336
+  1.0:
+    Sample size: 21
+    Adoption rate: 61.90%
+    F1 score: 0.8276
+    AUC-ROC: 0.7356
+
+cat__social_support_score_missing:
+  1.0:
+    Sample size: 34
+    Adoption rate: 58.82%
+    F1 score: 0.6190
+    AUC-ROC: 0.4875
+  0.0:
+    Sample size: 66
+    Adoption rate: 54.55%
+    F1 score: 0.7000
+    AUC-ROC: 0.6602
 
 Key Insights:
 ---------------
-• cognitive_status is the most important predictor of AgeTech adoption
+• cat__cognitive_status_No Impairment is the most important predictor of AgeTech adoption
 • Model performance varies across demographic subgroups
 • Consider subgroup-specific interventions for optimal adoption
 • Digital literacy and willingness to use technology are key factors

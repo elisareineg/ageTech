@@ -50,6 +50,55 @@ The synthetic dataset includes 500 individuals with 18 variables across four dom
 
 - Binary AgeTech adoption success
 
+## Synthetic Data Generation Mechanism
+
+### Adoption Rate Design
+
+The synthetic dataset consistently shows adoption rates around **50-60%** due to the realistic probability-based generation algorithm:
+
+#### **Base Probability: 35%**
+
+The algorithm starts with a 35% base adoption probability, which reflects real-world AgeTech adoption research.
+
+#### **Individual Probability Adjustments**
+
+Each person's adoption probability is adjusted based on their characteristics:
+
+**Positive Factors (Increase Probability):**
+
+- **High digital literacy**: +25% probability boost
+- **High willingness to use new technology**: +20% probability boost
+- **No cognitive impairment**: +15% probability boost
+- **Available caregiver support**: +10% probability boost
+- **Readily available tech assistance**: +15% probability boost
+- **Positive attitude toward technology**: +15% probability boost
+- **Digital-willingness interaction**: +10% probability boost
+
+**Negative Factors (Decrease Probability):**
+
+- **Low digital literacy**: -15% probability reduction
+- **Low willingness to use new technology**: -20% probability reduction
+- **Dementia**: -25% probability reduction
+- **Negative attitude toward technology**: -20% probability reduction
+
+#### **Probability Bounds**
+
+Final probabilities are constrained between 5% and 95% to ensure realistic outcomes.
+
+#### **Why 50-60% Overall Rate?**
+
+1. **Balanced Population**: The synthetic data creates a realistic mix of people with varying characteristics
+2. **Multiple Positive Factors**: Many individuals have several positive factors that boost their adoption probability
+3. **Research-Based Design**: The 35% base rate and adjustment factors are based on real-world AgeTech adoption studies
+4. **Natural Variation**: Random sampling from individual probabilities creates realistic distribution
+
+**Example Calculations:**
+
+- **High-adoption individual**: 35% base + 25% (high literacy) + 20% (high willingness) + 15% (no impairment) = 95% probability
+- **Low-adoption individual**: 35% base - 15% (low literacy) - 20% (low willingness) - 25% (dementia) = 5% probability (minimum bound)
+
+This design ensures the synthetic data reflects realistic AgeTech adoption patterns where adoption is moderate but achievable, with clear predictive factors that the ML model can learn to identify.
+
 ## Project Structure
 
 ```
@@ -229,6 +278,30 @@ This orchestrates:
 
    <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
 
+### Model Deployment (Production)
+
+When ready to deploy the trained model to production, use the deployment module:
+
+```bash
+python src/implementation/model_deployment.py
+```
+
+This creates production-ready deployment files:
+
+- **API Specification** (`api_spec.json`) - OpenAPI documentation for REST endpoints
+- **Dockerfile** - Container configuration for deployment
+- **Docker Compose** (`docker-compose.yml`) - Multi-service deployment setup
+- **Deployment Config** (`deployment_config.json`) - Production settings
+
+The deployment module provides:
+
+- **REST API endpoints** for single and batch predictions
+- **Model health monitoring** and performance tracking
+- **Production logging** and error handling
+- **Containerized deployment** with Docker
+
+**Note**: Run the main pipeline first to ensure trained models exist before deployment.
+
 ### Alternative: Quick Data Analysis
 
 For a quick overview without Jupyter, run:
@@ -279,6 +352,19 @@ This provides:
 #### Key Metrics to Look For:
 
 - **Overall Adoption Rate**: Typically 50-60% in synthetic data
+
+  **Why 50-60% Adoption Rate?**
+
+  The consistent 50-60% adoption rate is by design, reflecting realistic AgeTech adoption patterns:
+
+  - **Base Probability**: 35% starting point based on AgeTech research
+  - **Individual Adjustments**: Each person's probability is modified by their characteristics:
+    - **Positive factors** (high digital literacy, willingness, no cognitive impairment) increase probability
+    - **Negative factors** (low literacy, dementia, negative attitudes) decrease probability
+  - **Probability Bounds**: Constrained between 5% and 95% for realistic outcomes
+  - **Balanced Population**: Creates realistic mix of high and low adoption individuals
+  - **Research-Based**: Reflects actual AgeTech adoption studies in clinical populations
+
 - **Top Predictors**: Usually digital literacy, willingness to use tech, cognitive status
 - **Demographic Variations**: Different adoption rates across age groups and socioeconomic levels
 - **Technology Readiness**: Clear relationship between tech skills and adoption success

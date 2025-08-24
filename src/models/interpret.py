@@ -7,7 +7,7 @@ model predictions and feature importance in the context of AgeTech adoption.
 
 import pandas as pd
 import numpy as np
-# import matplotlib.pyplot as plt  # Commented out to avoid plots during pipeline
+import matplotlib.pyplot as plt
 import seaborn as sns
 try:
     import shap
@@ -53,29 +53,32 @@ class AgeTechInterpreter:
             
             print(f"Loaded model: {best_model_file}")
             
-            # Load validation data (since we're using full dataset)
-            X_test = pd.read_csv(os.path.join(data_dir, "X_val.csv"))
+            # Load test data (proper evaluation set)
+            X_test = pd.read_csv(os.path.join(data_dir, "X_test.csv"))
             y_test = X_test['adoption_success']
             X_test = X_test.drop('adoption_success', axis=1)
             
-            # Apply same feature selection as training
-            from sklearn.feature_selection import SelectKBest, f_classif
-            
-            # Load training data to fit selector
-            X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
-            y_train = X_train['adoption_success']
-            X_train = X_train.drop('adoption_success', axis=1)
-            
-            # Select same features as training
-            selector = SelectKBest(score_func=f_classif, k=15)
-            selector.fit(X_train, y_train)
+            # Load the saved feature selector for consistent evaluation
+            selector_path = os.path.join("models", "feature_selector.pkl")
+            if os.path.exists(selector_path):
+                selector = joblib.load(selector_path)
+                print(f"Loaded saved feature selector")
+            else:
+                # Fallback: recreate selector (less reliable)
+                from sklearn.feature_selection import SelectKBest, f_classif
+                X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
+                y_train = X_train['adoption_success']
+                X_train = X_train.drop('adoption_success', axis=1)
+                selector = SelectKBest(score_func=f_classif, k=15)
+                selector.fit(X_train, y_train)
+                print(f"Recreated feature selector (fallback)")
             
             # Apply to test data
             X_test_selected = selector.transform(X_test)
-            selected_features = X_train.columns[selector.get_support()].tolist()
+            selected_features = X_test.columns[selector.get_support()].tolist()
             X_test = pd.DataFrame(X_test_selected, columns=selected_features)
             
-            print(f"Loaded validation data: {X_test.shape}")
+            print(f"Loaded test data: {X_test.shape}")
             
             return model, X_test, y_test
             
@@ -92,10 +95,15 @@ class AgeTechInterpreter:
         
         try:
             # Create explainer based on model type
-            if hasattr(model, 'predict_proba'):
-                explainer = shap.TreeExplainer(model) if hasattr(model, 'feature_importances_') else shap.LinearExplainer(model, X)
+            if hasattr(model, 'feature_importances_'):
+                # Tree-based models (Random Forest, Gradient Boosting)
+                explainer = shap.TreeExplainer(model)
+            elif hasattr(model, 'coef_'):
+                # Linear models (Logistic Regression)
+                explainer = shap.LinearExplainer(model, X)
             else:
-                explainer = shap.TreeExplainer(model) if hasattr(model, 'feature_importances_') else shap.KernelExplainer(model.predict, X)
+                # Fallback for other models
+                explainer = shap.KernelExplainer(model.predict_proba, X.sample(n=min(100, len(X)), random_state=self.random_state))
             
             return explainer
             
@@ -155,14 +163,16 @@ class AgeTechInterpreter:
         
         try:
             # Get SHAP values for the sample
-            shap_values = explainer.shap_values(X.iloc[sample_idx:sample_idx+1])
+            sample_data = X.iloc[sample_idx:sample_idx+1]
+            shap_values = explainer.shap_values(sample_data)
+            
+            # Handle different output formats
+            if isinstance(shap_values, list):
+                shap_values = shap_values[1]  # For binary classification, use positive class
             
             # Create SHAP waterfall plot
             plt.figure(figsize=(10, 8))
-            shap.waterfall_plot(explainer.expected_value, 
-                               shap_values[0], 
-                               X.iloc[sample_idx], 
-                               show=False)
+            shap.waterfall_plot(explainer.expected_value, shap_values[0], sample_data.iloc[0], show=False)
             
             # Save plot
             plot_path = os.path.join(output_dir, "shap_waterfall.png")
