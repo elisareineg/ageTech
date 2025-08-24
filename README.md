@@ -228,36 +228,6 @@ This provides:
 - Key predictive factors
 - Dataset quality metrics
 
-### Model Accuracy Testing
-
-To test the actual accuracy of the AgeTech adoption prediction model, run:
-
-```bash
-python test_accuracy.py
-```
-
-This comprehensive test provides:
-
-- **Multiple Model Comparison**: Random Forest, Gradient Boosting, Logistic Regression
-- **Complete Metrics**: Accuracy, Precision, Recall, F1-Score, AUC-ROC
-- **Cross-Validation**: 5-fold cross-validation for robust performance assessment
-- **Feature Importance**: Top 10 most important predictors
-- **Detailed Classification Report**: Per-class performance breakdown
-- **Accuracy Verification**: Comparison against performance claims
-
-#### What the Accuracy Test Shows:
-
-- **Model Performance**: Actual accuracy rates for each algorithm
-- **Best Model Identification**: Which algorithm performs best
-- **Feature Rankings**: Which factors most strongly predict adoption
-- **Performance Validation**: Realistic assessment of model capabilities
-- **Statistical Robustness**: Cross-validation results and confidence intervals
-
-#### Expected Results:
-
-- **Best Model**: Usually Random Forest or Gradient Boosting
-- **Top Predictors**: Technology readiness index, willingness to use tech, cognitive status
-- **Balanced Performance**: Good precision and recall balance
 
 ### Understanding the Results
 
