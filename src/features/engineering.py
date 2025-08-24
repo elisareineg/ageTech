@@ -15,6 +15,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif
+from typing import Dict
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -84,6 +85,22 @@ class AgeTechFeatureEngineer:
         # Normalize to 0-1 scale
         score = (score - score.min()) / (score.max() - score.min())
         
+        # Add interaction terms for better predictive power
+        df['digital_literacy_score'] = score
+        
+        # Create attitude mapping for interactions
+        attitude_mapping = {
+            'Negative': 0, 'Neutral': 0.5, 'Positive': 1
+        }
+        
+        df['digital_attitude_interaction'] = (
+            score * df['attitude_toward_technology'].map(attitude_mapping)
+        )
+        df['tech_access_interaction'] = (
+            df['internet_access'].map(internet_mapping) * 
+            df['previous_tech_use'].map(tech_use_mapping)
+        )
+        
         return score
     
     def create_technology_readiness_index(self, df: pd.DataFrame) -> pd.Series:
@@ -113,8 +130,25 @@ class AgeTechFeatureEngineer:
         tri_score = (
             digital_literacy_score * 0.4 +
             df['attitude_toward_technology'].map(attitude_mapping) * 0.3 +
-            df['willingness_to_use_new_technology'].map(willingness_mapping) * 0.3
+            df['willingness_new_tech'].map(willingness_mapping) * 0.3
         )
+        
+        # Add enhanced interaction terms
+        df['technology_readiness_index'] = tri_score
+        df['tech_willingness_interaction'] = (
+            tri_score * df['willingness_new_tech'].map(willingness_mapping)
+        )
+        df['literacy_attitude_interaction'] = (
+            digital_literacy_score * df['attitude_toward_technology'].map(attitude_mapping)
+        )
+        
+        # Add polynomial features for better non-linear relationships
+        df['tech_readiness_squared'] = tri_score ** 2
+        df['digital_literacy_squared'] = digital_literacy_score ** 2
+        
+        # Add ratio features
+        df['tech_to_health_ratio'] = tri_score / (df['health_risk_score'] + 1e-6)
+        df['literacy_to_social_ratio'] = digital_literacy_score / (df['social_support_score'] + 1e-6)
         
         return tri_score
     
@@ -206,8 +240,8 @@ class AgeTechFeatureEngineer:
         
         # Calculate social support score
         social_support = (
-            df['caregiver_support_availability'].map(caregiver_mapping) * weights['caregiver_support'] +
-            df['social_engagement_level'].map(engagement_mapping) * weights['social_engagement'] +
+            df['caregiver_support'].map(caregiver_mapping) * weights['caregiver_support'] +
+            df['social_engagement'].map(engagement_mapping) * weights['social_engagement'] +
             df['tech_assistance_availability'].map(assistance_mapping) * weights['tech_assistance']
         )
         
@@ -242,7 +276,7 @@ class AgeTechFeatureEngineer:
         # Create interaction features
         df['digital_literacy_willingness_interaction'] = (
             df['digital_literacy_score'] * 
-            df['willingness_to_use_new_technology'].map({'Unwilling': 0, 'Neutral': 0.5, 'Willing': 1})
+            df['willingness_new_tech'].map({'Unwilling': 0, 'Neutral': 0.5, 'Willing': 1})
         )
         
         df['tech_readiness_social_support_interaction'] = (

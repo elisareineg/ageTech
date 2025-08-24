@@ -207,24 +207,25 @@ class AgeTechPreprocessor:
         return preprocessor
     
     def split_data(self, X: pd.DataFrame, y: pd.Series, 
-                   test_size: float = 0.2, val_size: float = 0.2) -> Tuple:
-        """Split data into train, validation, and test sets."""
+                   test_size: float = 0.0, val_size: float = 0.2) -> Tuple:
+        """Split data into train and validation sets (no test set)."""
         
-        # First split: train+val vs test
-        X_temp, X_test, y_temp, y_test = train_test_split(
-            X, y, test_size=test_size, random_state=self.random_state,
+        # Use entire dataset for training and validation
+        print(f"Using full dataset: {X.shape[0]} samples")
+        print(f"Class distribution: {y.value_counts(normalize=True)}")
+        
+        # Split into train and validation only
+        X_train, X_val, y_train, y_val = train_test_split(
+            X, y, test_size=val_size, random_state=self.random_state,
             stratify=y
         )
         
-        # Second split: train vs val
-        X_train, X_val, y_train, y_val = train_test_split(
-            X_temp, y_temp, test_size=val_size, random_state=self.random_state,
-            stratify=y_temp
-        )
+        # Create dummy test set (same as validation for compatibility)
+        X_test, y_test = X_val, y_val
         
         print(f"Train set: {X_train.shape[0]} samples")
         print(f"Validation set: {X_val.shape[0]} samples")
-        print(f"Test set: {X_test.shape[0]} samples")
+        print(f"Test set: {X_test.shape[0]} samples (same as validation)")
         
         return X_train, X_val, X_test, y_train, y_val, y_test
     

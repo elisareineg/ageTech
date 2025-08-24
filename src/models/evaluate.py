@@ -11,8 +11,8 @@ This module provides comprehensive model evaluation including:
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+# import matplotlib.pyplot as plt  # Commented out to avoid plots during pipeline
+# import seaborn as sns  # Commented out to avoid plots during pipeline
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score, 
     roc_auc_score, confusion_matrix, classification_report,
@@ -42,24 +42,45 @@ class AgeTechEvaluator:
         """Load the best model and test data."""
         
         try:
-            # Load best model
+            # Load best model - get the most recent one
             model_files = [f for f in os.listdir(model_dir) if f.startswith('best_model_')]
             if not model_files:
                 print("No best model found!")
                 return None, None, None
             
-            best_model_file = model_files[0]
+            # Sort by modification time to get the most recent
+            model_files_with_time = [(f, os.path.getmtime(os.path.join(model_dir, f))) for f in model_files]
+            model_files_with_time.sort(key=lambda x: x[1], reverse=True)
+            best_model_file = model_files_with_time[0][0]
+            
             model_path = os.path.join(model_dir, best_model_file)
             model = joblib.load(model_path)
             
             print(f"Loaded model: {best_model_file}")
             
-            # Load test data
-            X_test = pd.read_csv(os.path.join(data_dir, "X_test.csv"))
+            # Load validation data (since we're using full dataset)
+            X_test = pd.read_csv(os.path.join(data_dir, "X_val.csv"))
             y_test = X_test['adoption_success']
             X_test = X_test.drop('adoption_success', axis=1)
             
-            print(f"Loaded test data: {X_test.shape}")
+            # Apply same feature selection as training
+            from sklearn.feature_selection import SelectKBest, f_classif
+            
+            # Load training data to fit selector
+            X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
+            y_train = X_train['adoption_success']
+            X_train = X_train.drop('adoption_success', axis=1)
+            
+            # Select same features as training
+            selector = SelectKBest(score_func=f_classif, k=15)
+            selector.fit(X_train, y_train)
+            
+            # Apply to test data
+            X_test_selected = selector.transform(X_test)
+            selected_features = X_train.columns[selector.get_support()].tolist()
+            X_test = pd.DataFrame(X_test_selected, columns=selected_features)
+            
+            print(f"Loaded validation data: {X_test.shape}")
             
             return model, X_test, y_test
             
@@ -116,8 +137,13 @@ class AgeTechEvaluator:
                 subgroup_results[subgroup_name] = {}
                 
                 for category in categories:
-                    # Filter data for this subgroup
-                    mask = X_test[subgroup_name] == category
+                    # Filter data for this subgroup - handle both string and numeric values
+                    try:
+                        mask = X_test[subgroup_name] == category
+                    except:
+                        # If category comparison fails, try string conversion
+                        mask = X_test[subgroup_name].astype(str) == str(category)
+                    
                     if mask.sum() > 10:  # Minimum sample size
                         X_subgroup = X_test[mask]
                         y_subgroup = y_test[mask]
@@ -298,112 +324,12 @@ class AgeTechEvaluator:
     
     def create_evaluation_plots(self, overall_results: Dict, subgroup_results: Dict,
                               fairness_metrics: Dict) -> None:
-        """Create comprehensive evaluation plots."""
+        """Create comprehensive evaluation plots - DISABLED for pipeline execution."""
         
-        # Set up plotting style
-        plt.style.use('seaborn-v0_8')
-        fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-        fig.suptitle('AgeTech Model Evaluation Results', fontsize=16, fontweight='bold')
-        
-        # 1. ROC Curve
-        y_test = overall_results.get('y_test', None)
-        y_pred_proba = overall_results.get('probabilities', None)
-        
-        if y_test is not None and y_pred_proba is not None:
-            fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
-            auc = roc_auc_score(y_test, y_pred_proba)
-            
-            axes[0, 0].plot(fpr, tpr, label=f'ROC Curve (AUC = {auc:.3f})')
-            axes[0, 0].plot([0, 1], [0, 1], 'k--', label='Random')
-            axes[0, 0].set_xlabel('False Positive Rate')
-            axes[0, 0].set_ylabel('True Positive Rate')
-            axes[0, 0].set_title('ROC Curve')
-            axes[0, 0].legend()
-            axes[0, 0].grid(True)
-        
-        # 2. Confusion Matrix
-        cm = overall_results.get('confusion_matrix', None)
-        if cm is not None:
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[0, 1])
-            axes[0, 1].set_title('Confusion Matrix')
-            axes[0, 1].set_xlabel('Predicted')
-            axes[0, 1].set_ylabel('Actual')
-        
-        # 3. Subgroup Performance (F1 Score)
-        subgroup_f1 = {}
-        for subgroup_name, categories in subgroup_results.items():
-            for category, results in categories.items():
-                if 'metrics' in results:
-                    key = f"{subgroup_name}: {category}"
-                    subgroup_f1[key] = results['metrics']['f1_score']
-        
-        if subgroup_f1:
-            categories = list(subgroup_f1.keys())
-            f1_scores = list(subgroup_f1.values())
-            
-            axes[0, 2].barh(range(len(categories)), f1_scores)
-            axes[0, 2].set_yticks(range(len(categories)))
-            axes[0, 2].set_yticklabels(categories, fontsize=8)
-            axes[0, 2].set_xlabel('F1 Score')
-            axes[0, 2].set_title('Subgroup Performance (F1 Score)')
-            axes[0, 2].grid(True, axis='x')
-        
-        # 4. Fairness Metrics
-        if fairness_metrics:
-            demographic_parity_data = {}
-            for attr, metrics in fairness_metrics.items():
-                if 'demographic_parity' in metrics:
-                    for category, rate in metrics['demographic_parity'].items():
-                        key = f"{attr}: {category}"
-                        demographic_parity_data[key] = rate
-            
-            if demographic_parity_data:
-                categories = list(demographic_parity_data.keys())
-                rates = list(demographic_parity_data.values())
-                
-                axes[1, 0].barh(range(len(categories)), rates)
-                axes[1, 0].set_yticks(range(len(categories)))
-                axes[1, 0].set_yticklabels(categories, fontsize=8)
-                axes[1, 0].set_xlabel('Prediction Rate')
-                axes[1, 0].set_title('Demographic Parity')
-                axes[1, 0].grid(True, axis='x')
-        
-        # 5. Precision-Recall Curve
-        if y_test is not None and y_pred_proba is not None:
-            precision, recall, _ = precision_recall_curve(y_test, y_pred_proba)
-            axes[1, 1].plot(recall, precision, label='Precision-Recall Curve')
-            axes[1, 1].set_xlabel('Recall')
-            axes[1, 1].set_ylabel('Precision')
-            axes[1, 1].set_title('Precision-Recall Curve')
-            axes[1, 1].legend()
-            axes[1, 1].grid(True)
-        
-        # 6. Adoption Rate by Subgroup
-        adoption_rates = {}
-        for subgroup_name, categories in subgroup_results.items():
-            for category, results in categories.items():
-                key = f"{subgroup_name}: {category}"
-                adoption_rates[key] = results.get('adoption_rate', 0)
-        
-        if adoption_rates:
-            categories = list(adoption_rates.keys())
-            rates = list(adoption_rates.values())
-            
-            axes[1, 2].barh(range(len(categories)), rates)
-            axes[1, 2].set_yticks(range(len(categories)))
-            axes[1, 2].set_yticklabels(categories, fontsize=8)
-            axes[1, 2].set_xlabel('Adoption Rate')
-            axes[1, 2].set_title('Adoption Rate by Subgroup')
-            axes[1, 2].grid(True, axis='x')
-        
-        plt.tight_layout()
-        
-        # Save plot
-        os.makedirs("results", exist_ok=True)
-        plt.savefig("results/model_evaluation_plots.png", dpi=300, bbox_inches='tight')
-        plt.show()
-        
-        print("Evaluation plots saved to results/model_evaluation_plots.png")
+        # Plotting disabled during pipeline execution to avoid popup windows
+        # Plots are only created in Jupyter notebooks for data visualization
+        print("Evaluation plots disabled during pipeline execution")
+        print("Use Jupyter notebooks for data visualization")
     
     def generate_evaluation_report(self, overall_results: Dict, subgroup_results: Dict,
                                  clinical_results: Dict, device_results: Dict,

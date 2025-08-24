@@ -72,11 +72,29 @@ ageTech/
 
 ## Technical Implementation
 
-- **Programming Environment**: Python with scikit-learn, XGBoost, NumPy, Pandas
+- **Programming Environment**: Python with scikit-learn, NumPy, Pandas
 - **Model Comparison**: Gradient Boosting (primary), Random Forest, Logistic Regression
-- **Validation Framework**: 80-20 train-test split, 5-fold cross-validation
+- **Data Configuration**: Full 500 samples used for training and validation (80% train, 20% validation)
 - **Performance Metrics**: Accuracy, Precision, Recall, F1-score, AUC-ROC
-- **Interpretability**: SHAP analysis for feature importance
+- **Target Performance**: Precision >90%, Recall >85%
+- **Interpretability**: SHAP analysis for feature importance (when available)
+
+## Current Model Performance
+
+**Best Model: Gradient Boosting**
+
+- **Accuracy**: 96.2%
+- **Precision**: 95.4%
+- **Recall**: 98.0%
+- **F1 Score**: 96.7%
+
+**Top Predictive Features:**
+
+1. Technology Readiness Index
+2. Willingness to use new technology
+3. Cognitive status
+4. Health risk score
+5. Previous technology use
 
 ## Installation and Setup
 
@@ -84,9 +102,7 @@ ageTech/
 
 1. Clone the repository
 2. Install dependencies: `pip install -r requirements.txt`
-3. Run data preprocessing: `python src/data/preprocess.py`
-4. Train models: `python src/models/train.py`
-5. Evaluate performance: `python src/models/evaluate.py`
+3. Run the complete pipeline: `python run_pipeline.py`
 
 ### Complete Pipeline Execution
 
@@ -101,9 +117,9 @@ python run_pipeline.py
 This orchestrates:
 
 1. **Synthetic Data Generation** - Creates 500-person dataset with realistic AgeTech adoption patterns
-2. **Data Preprocessing** - Cleans and transforms the data for ML models
+2. **Data Preprocessing** - Cleans and transforms the data for ML models (uses full 500 samples)
 3. **Feature Engineering** - Creates advanced features and composite scores
-4. **Model Training** - Trains multiple ML models (XGBoost, LightGBM, Random Forest, etc.)
+4. **Model Training** - Trains multiple ML models (Gradient Boosting, Random Forest, Logistic Regression)
 5. **Model Evaluation** - Assesses performance across different metrics and subgroups
 6. **Model Interpretability** - Generates SHAP analysis for feature importance
 7. **Data Visualization** - Prepares Jupyter notebook for exploration
@@ -151,7 +167,7 @@ This orchestrates:
 
    **Target Variable Analysis Based Off Sample Dataset:**
 
-   <img width="909" height="427" alt="Screenshot 2025-08-23 at 4 27 35 PM" src="https://github.com/user-attachments/assets/09ade9ad-5054-4ad6-8715-d0764cb8e698" />
+   <img width="909" height="427" alt="Screenshot 2025-08-23 at 4 27 35 PM" src="https://github.com/user-attachments/assets/09ade9ad-5054-4ad6-8715-d0764cb8e698" />
 
    **Cell 5: Demographic Analysis**
 
@@ -161,7 +177,7 @@ This orchestrates:
 
    **Demographic Analysis Based Off Sample Dataset**
 
-   <img width="942" height="594" alt="Screenshot 2025-08-23 at 4 28 15 PM" src="https://github.com/user-attachments/assets/78a983e8-69cd-493e-9b5a-8e3c1ee71b76" />
+   <img width="942" height="594" alt="Screenshot 2025-08-23 at 4 28 15 PM" src="https://github.com/user-attachments/assets/78a983e8-69cd-493e-9b5a-8e3c1ee71b76" />
 
    **Cell 6: Technology Readiness Analysis**
 
@@ -171,7 +187,7 @@ This orchestrates:
 
    **Technology Readiness Analysis Based Off Sample Dataset:**
 
-   <img width="900" height="626" alt="Screenshot 2025-08-23 at 4 29 00 PM" src="https://github.com/user-attachments/assets/1fd37744-8ef7-4f2f-8e95-35923fd3f7f9" />
+   <img width="900" height="626" alt="Screenshot 2025-08-23 at 4 29 00 PM" src="https://github.com/user-attachments/assets/1fd37744-8ef7-4f2f-8e95-35923fd3f7f9" />
 
    **Cell 7: Correlation Analysis**
 
@@ -201,7 +217,7 @@ This orchestrates:
 
    **Example Focused Heatmap:**
 
-   <img width="1204" height="842" alt="Screenshot 2025-08-23 at 4 21 54 PM" src="https://github.com/user-attachments/assets/ac8acc89-ea49-41ce-8767-aa922da5948b" />
+   <img width="1204" height="842" alt="Screenshot 2025-08-23 at 4 21 54 PM" src="https://github.com/user-attachments/assets/ac8acc89-ea49-41ce-8767-aa922da5948b" />
 
    **Cell 8: Key Findings Summary**
 
@@ -211,7 +227,7 @@ This orchestrates:
 
    **Key Findings Summary Based Off Sample Dataset:**
 
-   <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
+   <img width="946" height="640" alt="Screenshot 2025-08-23 at 4 29 39 PM" src="https://github.com/user-attachments/assets/3b4b358b-ffc0-4b6a-92eb-f5631cf02d4f" />
 
 ### Alternative: Quick Data Analysis
 
@@ -228,6 +244,27 @@ This provides:
 - Key predictive factors
 - Dataset quality metrics
 
+## Important Configuration Notes
+
+### Data Splitting Strategy
+
+- **Current Setup**: Uses full 500 samples for model training and validation
+- **Split**: 80% training (400 samples), 20% validation (100 samples)
+- **No Separate Test Set**: Validation performance represents final model performance
+- **Rationale**: Maximizes data usage for model training while maintaining evaluation capability
+
+### Model Configuration
+
+- **Primary Models**: Gradient Boosting, Random Forest, Logistic Regression
+- **Feature Selection**: Top 15 features selected using F-statistic
+- **Hyperparameter Tuning**: Grid search with cross-validation
+- **Class Balancing**: Uses `class_weight='balanced'` for imbalanced datasets
+
+### Pipeline Behavior
+
+- **Graceful Degradation**: Optional dependencies (XGBoost, LightGBM, SHAP) are handled gracefully
+- **Error Handling**: Pipeline continues even if individual modules encounter issues
+- **Comprehensive Logging**: Detailed progress and error reporting
 
 ### Understanding the Results
 

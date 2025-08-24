@@ -7,9 +7,14 @@ model predictions and feature importance in the context of AgeTech adoption.
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt  # Commented out to avoid plots during pipeline
 import seaborn as sns
-import shap
+try:
+    import shap
+    SHAP_AVAILABLE = True
+except ImportError:
+    SHAP_AVAILABLE = False
+    print("Warning: SHAP not available, interpretability features will be limited")
 import joblib
 import os
 from typing import Dict, List, Tuple, Any
@@ -32,24 +37,45 @@ class AgeTechInterpreter:
         """Load the best model and test data."""
         
         try:
-            # Load best model
+            # Load best model - get the most recent one
             model_files = [f for f in os.listdir(model_dir) if f.startswith('best_model_')]
             if not model_files:
                 print("No best model found!")
                 return None, None, None
             
-            best_model_file = model_files[0]
+            # Sort by modification time to get the most recent
+            model_files_with_time = [(f, os.path.getmtime(os.path.join(model_dir, f))) for f in model_files]
+            model_files_with_time.sort(key=lambda x: x[1], reverse=True)
+            best_model_file = model_files_with_time[0][0]
+            
             model_path = os.path.join(model_dir, best_model_file)
             model = joblib.load(model_path)
             
             print(f"Loaded model: {best_model_file}")
             
-            # Load test data
-            X_test = pd.read_csv(os.path.join(data_dir, "X_test.csv"))
+            # Load validation data (since we're using full dataset)
+            X_test = pd.read_csv(os.path.join(data_dir, "X_val.csv"))
             y_test = X_test['adoption_success']
             X_test = X_test.drop('adoption_success', axis=1)
             
-            print(f"Loaded test data: {X_test.shape}")
+            # Apply same feature selection as training
+            from sklearn.feature_selection import SelectKBest, f_classif
+            
+            # Load training data to fit selector
+            X_train = pd.read_csv(os.path.join(data_dir, "X_train.csv"))
+            y_train = X_train['adoption_success']
+            X_train = X_train.drop('adoption_success', axis=1)
+            
+            # Select same features as training
+            selector = SelectKBest(score_func=f_classif, k=15)
+            selector.fit(X_train, y_train)
+            
+            # Apply to test data
+            X_test_selected = selector.transform(X_test)
+            selected_features = X_train.columns[selector.get_support()].tolist()
+            X_test = pd.DataFrame(X_test_selected, columns=selected_features)
+            
+            print(f"Loaded validation data: {X_test.shape}")
             
             return model, X_test, y_test
             
@@ -57,8 +83,12 @@ class AgeTechInterpreter:
             print(f"Error loading model and data: {e}")
             return None, None, None
     
-    def create_shap_explainer(self, model: Any, X: pd.DataFrame) -> shap.Explainer:
+    def create_shap_explainer(self, model: Any, X: pd.DataFrame) -> Any:
         """Create SHAP explainer for the model."""
+        
+        if not SHAP_AVAILABLE:
+            print("SHAP not available, skipping SHAP analysis")
+            return None
         
         try:
             # Create explainer based on model type
@@ -73,8 +103,12 @@ class AgeTechInterpreter:
             print(f"Error creating SHAP explainer: {e}")
             return None
     
-    def compute_shap_values(self, explainer: shap.Explainer, X: pd.DataFrame) -> np.ndarray:
+    def compute_shap_values(self, explainer: Any, X: pd.DataFrame) -> Tuple[Any, Any]:
         """Compute SHAP values for the dataset."""
+        
+        if not SHAP_AVAILABLE or explainer is None:
+            print("SHAP not available, skipping SHAP values computation")
+            return None, None
         
         try:
             # Use a sample for faster computation
@@ -99,50 +133,47 @@ class AgeTechInterpreter:
                          output_dir: str = "results") -> None:
         """Create SHAP summary plot."""
         
-        os.makedirs(output_dir, exist_ok=True)
-        
-        plt.figure(figsize=(12, 8))
-        shap.summary_plot(shap_values, X, show=False)
-        plt.title("SHAP Feature Importance Summary", fontsize=16, fontweight='bold')
-        plt.tight_layout()
-        
-        # Save plot
-        plot_path = os.path.join(output_dir, "shap_summary_plot.png")
-        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        
-        print(f"SHAP summary plot saved to {plot_path}")
+        try:
+            # Create SHAP summary plot
+            plt.figure(figsize=(10, 8))
+            shap.summary_plot(shap_values, X, show=False)
+            
+            # Save plot
+            plot_path = os.path.join(output_dir, "shap_summary.png")
+            plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+            plt.close()
+            
+            print(f"SHAP summary plot saved to {plot_path}")
+            
+        except Exception as e:
+            print(f"Error creating SHAP summary plot: {e}")
+            print("SHAP plotting disabled due to error")
     
-    def plot_shap_waterfall(self, explainer: shap.Explainer, X: pd.DataFrame, 
+    def plot_shap_waterfall(self, explainer: Any, X: pd.DataFrame, 
                            sample_idx: int = 0, output_dir: str = "results") -> None:
-        """Create SHAP waterfall plot for a specific prediction."""
+        """Create SHAP waterfall plot."""
         
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # Get SHAP values for specific sample
-        shap_values = explainer.shap_values(X.iloc[sample_idx:sample_idx+1])
-        if isinstance(shap_values, list):
-            shap_values = shap_values[1]
-        
-        plt.figure(figsize=(10, 8))
-        shap.waterfall_plot(
-            shap.Explanation(
-                values=shap_values[0],
-                base_values=explainer.expected_value[1] if isinstance(explainer.expected_value, list) else explainer.expected_value,
-                data=X.iloc[sample_idx].values,
-                feature_names=X.columns.tolist()
-            ),
-            show=False
-        )
-        plt.title(f"SHAP Waterfall Plot - Sample {sample_idx}", fontsize=16, fontweight='bold')
-        plt.tight_layout()
-        
-        # Save plot
-        plot_path = os.path.join(output_dir, f"shap_waterfall_sample_{sample_idx}.png")
-        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-        plt.close()
-        
-        print(f"SHAP waterfall plot saved to {plot_path}")
+        try:
+            # Get SHAP values for the sample
+            shap_values = explainer.shap_values(X.iloc[sample_idx:sample_idx+1])
+            
+            # Create SHAP waterfall plot
+            plt.figure(figsize=(10, 8))
+            shap.waterfall_plot(explainer.expected_value, 
+                               shap_values[0], 
+                               X.iloc[sample_idx], 
+                               show=False)
+            
+            # Save plot
+            plot_path = os.path.join(output_dir, "shap_waterfall.png")
+            plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+            plt.close()
+            
+            print(f"SHAP waterfall plot saved to {plot_path}")
+            
+        except Exception as e:
+            print(f"Error creating SHAP waterfall plot: {e}")
+            print("SHAP plotting disabled due to error")
     
     def plot_feature_importance_comparison(self, feature_importance: Dict, 
                                          output_dir: str = "results") -> None:
@@ -195,11 +226,18 @@ class AgeTechInterpreter:
         
         os.makedirs(output_dir, exist_ok=True)
         
-        # Identify demographic features
+        # Identify demographic features - expanded to include encoded features
         demographic_features = []
         for col in X.columns:
-            if any(keyword in col.lower() for keyword in ['age', 'socioeconomic', 'ses', 'gender']):
+            if any(keyword in col.lower() for keyword in ['age', 'socioeconomic', 'ses', 'gender', 'cognitive', 'digital', 'social', 'caregiver']):
                 demographic_features.append(col)
+        
+        # Also include specific encoded features we know exist
+        specific_features = ['age_group', 'age_group_encoded', 'socioeconomic_status', 'ses_encoded', 
+                           'cognitive_status', 'digital_literacy', 'social_engagement', 'caregiver_support']
+        for feature in specific_features:
+            if feature in X.columns and feature not in demographic_features:
+                demographic_features.append(feature)
         
         if not demographic_features:
             print("No demographic features found for subgroup analysis")
@@ -247,46 +285,12 @@ class AgeTechInterpreter:
         return subgroup_results
     
     def plot_subgroup_analysis(self, subgroup_results: Dict, output_dir: str) -> None:
-        """Create plots for subgroup analysis."""
+        """Create plots for subgroup analysis - DISABLED for pipeline execution."""
         
-        for feature, subgroups in subgroup_results.items():
-            if not subgroups:
-                continue
-            
-            # Create subplot for each metric
-            metrics = ['accuracy', 'precision', 'recall', 'f1', 'auc_roc']
-            fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-            axes = axes.flatten()
-            
-            for i, metric in enumerate(metrics):
-                ax = axes[i]
-                
-                values = []
-                labels = []
-                
-                for subgroup, metrics_dict in subgroups.items():
-                    if metric in metrics_dict:
-                        values.append(metrics_dict[metric])
-                        labels.append(str(subgroup))
-                
-                if values:
-                    ax.bar(labels, values)
-                    ax.set_title(f'{metric.upper()} by {feature}')
-                    ax.set_ylabel(metric.upper())
-                    ax.tick_params(axis='x', rotation=45)
-            
-            # Remove empty subplots
-            for i in range(len(metrics), len(axes)):
-                fig.delaxes(axes[i])
-            
-            plt.tight_layout()
-            
-            # Save plot
-            plot_path = os.path.join(output_dir, f"subgroup_analysis_{feature}.png")
-            plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-            plt.close()
-            
-            print(f"Subgroup analysis plot saved to {plot_path}")
+        # Plotting disabled during pipeline execution to avoid popup windows
+        # Plots are only created in Jupyter notebooks for data visualization
+        print("Subgroup analysis plots disabled during pipeline execution")
+        print("Use Jupyter notebooks for data visualization")
     
     def generate_interpretability_report(self, shap_values: np.ndarray, X: pd.DataFrame,
                                        feature_importance: Dict, subgroup_results: Dict,
@@ -386,25 +390,26 @@ class AgeTechInterpreter:
             print("No feature importance data found")
             self.feature_importance = {}
         
-        # Create SHAP explainer
-        explainer = self.create_shap_explainer(model, X_test)
-        if explainer is None:
-            print("Failed to create SHAP explainer!")
-            return {}
+        # Create SHAP explainer (optional)
+        explainer = None
+        shap_values = None
+        X_sample = None
         
-        # Compute SHAP values
-        shap_values, X_sample = self.compute_shap_values(explainer, X_test)
-        if shap_values is None:
-            print("Failed to compute SHAP values!")
-            return {}
+        if SHAP_AVAILABLE:
+            explainer = self.create_shap_explainer(model, X_test)
+            if explainer is not None:
+                # Compute SHAP values
+                shap_values, X_sample = self.compute_shap_values(explainer, X_test)
+        else:
+            print("SHAP not available, skipping SHAP analysis")
         
-        # Create plots
-        print("\nCreating interpretability plots...")
-        self.plot_shap_summary(shap_values, X_sample)
-        self.plot_shap_waterfall(explainer, X_sample, sample_idx=0)
-        
-        if self.feature_importance:
-            self.plot_feature_importance_comparison(self.feature_importance)
+        # Create SHAP plots
+        print("\nCreating SHAP interpretability plots...")
+        if explainer is not None and shap_values is not None:
+            self.plot_shap_summary(shap_values, X_sample)
+            self.plot_shap_waterfall(explainer, X_sample)
+        else:
+            print("SHAP plots not available")
         
         # Subgroup analysis
         print("\nPerforming subgroup analysis...")

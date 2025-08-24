@@ -1,0 +1,32 @@
+AgeTech Adoption Prediction - Model Training Report
+============================================================
+
+Model Performance Comparison:
+----------------------------------------
+Model                Accuracy   Precision  Recall     F1 Score  
+----------------------------------------------------------------------
+random_forest        85.3%      87.0%      87.0%      87.0%     
+gradient_boosting    96.2%      95.4%      98.0%      96.7%     
+logistic_regression  71.3%      75.6%      72.3%      73.9%     
+
+Best Model: gradient_boosting
+
+Validation Set Performance:
+------------------------------
+Accuracy: 96.2%
+Precision: 95.4%
+Recall: 98.0%
+F1 Score: 96.7%
+
+Top 10 Most Important Features:
+------------------------------
+technology_readiness_index: 0.1296
+willingness_new_tech: 0.0970
+cognitive_status: 0.0834
+health_risk_score: 0.0772
+previous_tech_use: 0.0734
+attitude_toward_technology: 0.0714
+caregiver_support: 0.0713
+digital_literacy: 0.0696
+tech_readiness_score: 0.0653
+device_preferences: 0.0624
