@@ -78,13 +78,13 @@ ageTech/
 - **Performance Metrics**: Accuracy, Precision, Recall, F1-score, AUC-ROC
 - **Target Performance**: Precision >90%, Recall >85%
 - **Interpretability**: SHAP analysis for feature importance (when available)
-- **Visualization**: Direct chart generation (PNG files) 
+- **Visualization**: Direct chart generation (PNG files)
 
 ### **Visualization System**
 
 `src/visualization/generate_charts.py` - Direct chart generation system
 
-- **Features**: 11 comprehensive visualizations (PNG files), 
+- **Features**: 11 comprehensive visualizations (PNG files),
 - **Output**: High-quality charts for data overview, model performance, feature importance, correlations
 - **Usage**: Automatic (via pipeline) or manual: `python src/visualization/generate_charts.py`
 - **Result**: Professional visualizations saved in `visualizations/` directory
@@ -116,7 +116,6 @@ This orchestrates:
 4. **Model Training** - Trains multiple ML models (Gradient Boosting, Random Forest, Logistic Regression)
 5. **Model Evaluation** - Assesses performance across different metrics and subgroups
 6. **Model Interpretability** - Generates SHAP analysis for feature importance
-   
 
 **For a quick overview of results, run:**
 
@@ -137,7 +136,6 @@ This provides:
 
 - **Current Setup**: Uses full 500 samples for model training and validation
 - **Split**: 80% training (400 samples), 20% validation (100 samples)
-- **No Separate Test Set**: Validation performance represents final model performance
 - **Rationale**: Maximizes data usage for model training while maintaining evaluation capability
 
 ### Model Configuration
@@ -162,6 +160,12 @@ This provides:
 - **Demographic Insights**: Age, socioeconomic, and living situation effects
 - **Technology Barriers**: Digital literacy and tech readiness impacts
 - **Correlation Strength**: Statistical relationships between variables
+
+**Visualization Example:**
+
+![Feature Importance - Gradient Boosting](visualizations/06_feature_importance_gradient_boosting_latest.png)
+
+_This chart shows the top 15 most important features for predicting AgeTech adoption using Gradient Boosting. Features are ranked by their SHAP importance values, with higher values indicating stronger predictive power._
 
 #### Key Metrics to Look For & Understand:
 
