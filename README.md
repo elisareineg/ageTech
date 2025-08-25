@@ -116,7 +116,9 @@ This orchestrates:
 4. **Model Training** - Trains multiple ML models (Gradient Boosting, Random Forest, Logistic Regression)
 5. **Model Evaluation** - Assesses performance across different metrics and subgroups
 6. **Model Interpretability** - Generates SHAP analysis for feature importance
-   For a quick overview of results, run:
+   
+
+**For a quick overview of results, run:**
 
 ```bash
 python run_analysis.py
