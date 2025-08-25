@@ -225,92 +225,118 @@ class AgeTechDataGenerator:
         return df
     
     def _generate_adoption_outcome(self, df: pd.DataFrame) -> List[int]:
-        """Generate adoption outcome based on key predictors with varied adoption rates."""
+        """Generate adoption outcome with realistic ~40% overall adoption rate."""
         
-        # Create truly random base adoption probabilities
-        base_rates = np.random.uniform(0.30, 0.80, self.n_samples)
+        # Start with realistic base rates (20-50% range)
+        base_rates = np.random.uniform(0.20, 0.50, self.n_samples)
         
         adoption_probs = []
         for i, (_, row) in enumerate(df.iterrows()):
             base_prob = base_rates[i]
             
-            # Age affects adoption rate
+            # Age affects adoption rate (stronger negative impact for older adults)
             if row['age_group'] == '65-74':
                 age_modifier = 0.15
             elif row['age_group'] == '75-84':
-                age_modifier = 0.0
+                age_modifier = -0.10  # More realistic negative impact
             else:  # 85+
-                age_modifier = -0.2
+                age_modifier = -0.25  # Stronger negative impact
             
             # Socioeconomic status affects adoption
             if row['socioeconomic_status'] == 'High':
-                ses_modifier = 0.2
+                ses_modifier = 0.20
             elif row['socioeconomic_status'] == 'Medium':
                 ses_modifier = 0.05
             else:  # Low
-                ses_modifier = -0.15
+                ses_modifier = -0.20  # Stronger negative impact
             
             # Digital literacy strongly affects adoption
             if row['digital_literacy'] == 'High':
                 digital_modifier = 0.25
             elif row['digital_literacy'] == 'Medium':
-                digital_modifier = 0.05
+                digital_modifier = 0.00  # Neutral for medium
             else:  # Low
-                digital_modifier = -0.15
+                digital_modifier = -0.25  # Stronger negative impact
             
             # Technology willingness affects adoption
             if row['willingness_new_tech'] == 'High':
                 tech_modifier = 0.20
             elif row['willingness_new_tech'] == 'Medium':
-                tech_modifier = 0.05
+                tech_modifier = 0.00  # Neutral for medium
             else:  # Low
-                tech_modifier = -0.20
+                tech_modifier = -0.20  # Stronger negative impact
             
-            # Cognitive status affects adoption
+            # Cognitive status affects adoption (stronger impact)
             if row['cognitive_status'] == 'No Impairment':
-                cognitive_modifier = 0.15
+                cognitive_modifier = 0.10
             elif row['cognitive_status'] == 'MCI':
-                cognitive_modifier = -0.05
+                cognitive_modifier = -0.10  # Reduced negative impact
             else:  # Dementia
-                cognitive_modifier = -0.25
+                cognitive_modifier = -0.25  # Reduced negative impact
             
             # Caregiver support affects adoption
-            if row['caregiver_support'] != 'None':
+            if row['caregiver_support'] in ['Both', 'Professional']:
+                caregiver_modifier = 0.15
+            elif row['caregiver_support'] == 'Family':
                 caregiver_modifier = 0.10
-            else:
-                caregiver_modifier = 0.0
+            else:  # None
+                caregiver_modifier = -0.10
             
             # Tech assistance availability affects adoption
             if row['tech_assistance_availability'] == 'Readily Available':
                 assistance_modifier = 0.15
             elif row['tech_assistance_availability'] == 'Limited':
-                assistance_modifier = 0.05
+                assistance_modifier = 0.00  # Neutral
             else:  # None
-                assistance_modifier = -0.10
+                assistance_modifier = -0.15
             
-            # Attitude toward technology affects adoption
+            # Attitude toward technology affects adoption (stronger impact)
             if row['attitude_toward_technology'] == 'Positive':
                 attitude_modifier = 0.15
             elif row['attitude_toward_technology'] == 'Neutral':
-                attitude_modifier = 0.0
+                attitude_modifier = -0.05  # Slight negative for neutral
             else:  # Negative
-                attitude_modifier = -0.20
+                attitude_modifier = -0.25  # Stronger negative impact
+            
+            # Physical limitations should reduce adoption
+            if row['physical_mobility'] == 'Full Assistance':
+                mobility_modifier = -0.20
+            elif row['physical_mobility'] == 'Assistive Device':
+                mobility_modifier = -0.10
+            else:
+                mobility_modifier = 0.00
+            
+            # Hearing/vision impairment should reduce adoption
+            if row['hearing_vision_impairment'] == 'Severe':
+                sensory_modifier = -0.25
+            elif row['hearing_vision_impairment'] == 'Moderate':
+                sensory_modifier = -0.15
+            elif row['hearing_vision_impairment'] == 'Mild':
+                sensory_modifier = -0.05
+            else:
+                sensory_modifier = 0.00
             
             # Calculate final adoption probability
             adoption_prob = (base_prob + age_modifier + ses_modifier + digital_modifier + 
                            tech_modifier + cognitive_modifier + caregiver_modifier + 
-                           assistance_modifier + attitude_modifier)
+                           assistance_modifier + attitude_modifier + mobility_modifier + 
+                           sensory_modifier)
             
-            # Add more random noise to prevent patterns
-            adoption_prob += np.random.normal(0, 0.10)
+            # Add controlled random noise
+            adoption_prob += np.random.normal(0, 0.08)
             
-            # Clip to valid probability range
-            adoption_prob = max(0.05, min(0.95, adoption_prob))
+            # Clip to valid probability range with more realistic bounds
+            adoption_prob = max(0.05, min(0.75, adoption_prob))
             
             adoption_probs.append(adoption_prob)
         
         # Generate outcomes
         outcomes = np.random.binomial(1, adoption_probs)
+        
+        # Verify the overall adoption rate is realistic
+        actual_rate = np.mean(outcomes)
+        print(f"Generated adoption rate: {actual_rate:.2%}")
+        
         return outcomes.tolist()
     
     def generate_dataset(self) -> pd.DataFrame:

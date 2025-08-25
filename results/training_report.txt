@@ -5,41 +5,41 @@ MODEL PERFORMANCE SUMMARY
 ----------------------------------------
 
 RANDOM_FOREST:
-  Validation F1:    0.9527
-  Validation AUC:   0.9862
-  Validation Acc:   0.9250
+  Validation F1:    0.9412
+  Validation AUC:   0.9961
+  Validation Acc:   0.9625
 
 GRADIENT_BOOSTING:
-  Validation F1:    0.9852
-  Validation AUC:   0.9987
-  Validation Acc:   0.9775
+  Validation F1:    0.9344
+  Validation AUC:   0.9949
+  Validation Acc:   0.9575
 
 LOGISTIC_REGRESSION:
-  Validation F1:    0.8716
-  Validation AUC:   0.8039
-  Validation Acc:   0.7850
+  Validation F1:    0.5299
+  Validation AUC:   0.8054
+  Validation Acc:   0.7250
 
-BEST MODEL: gradient_boosting
+BEST MODEL: random_forest
 --------------------
 Test Set Performance:
-  Accuracy:   75.0%
-  Precision:  82.9%
-  Recall:     84.0%
-  F1 Score:   83.4%
-  AUC-ROC:    0.6736
+  Accuracy:   68.0%
+  Precision:  54.2%
+  Recall:     38.2%
+  F1 Score:   44.8%
+  AUC-ROC:    0.7115
 
 TOP 10 FEATURES:
 --------------------
- 1. num__technology_readiness_index: 0.2377
- 2. cat__socioeconomic_status_Low: 0.0964
- 3. cat__device_preferences_Communication: 0.0714
- 4. cat__attitude_toward_technology_Positive: 0.0678
- 5. cat__age_group_encoded_3: 0.0645
- 6. cat__cognitive_status_No Impairment: 0.0641
- 7. cat__health_risk_score_6.0: 0.0629
- 8. cat__living_situation_Independent Living: 0.0547
- 9. cat__digital_literacy_Low: 0.0542
-10. cat__age_group_encoded_2: 0.0532
+ 1. num__technology_readiness_index: 0.1794
+ 2. cat__attitude_toward_technology_Positive: 0.0746
+ 3. cat__physical_mobility_Independent: 0.0723
+ 4. cat__digital_literacy_score_3: 0.0667
+ 5. cat__socioeconomic_status_Low: 0.0648
+ 6. cat__cognitive_status_No Impairment: 0.0647
+ 7. cat__cognitive_assistance_interaction_1: 0.0621
+ 8. cat__device_preferences_Safety/Emergency: 0.0596
+ 9. cat__age_group_85+: 0.0535
+10. cat__ses_encoded_3: 0.0534
 
 MEMORY OPTIMIZATION NOTES:
 ------------------------------

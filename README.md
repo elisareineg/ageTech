@@ -78,13 +78,12 @@ ageTech/
 - **Performance Metrics**: Accuracy, Precision, Recall, F1-score, AUC-ROC
 - **Target Performance**: Precision >90%, Recall >85%
 - **Interpretability**: SHAP analysis for feature importance (when available)
-- **Visualization**: Direct chart generation (PNG files) - 
-
+- **Visualization**: Direct chart generation (PNG files) -
 
 ### **Visualization System**
 
- `src/visualization/generate_charts.py` - Direct chart generation system
- 
+`src/visualization/generate_charts.py` - Direct chart generation system
+
 - **Features**: 11 comprehensive visualizations (PNG files), no Jupyter dependencies
 - **Output**: High-quality charts for data overview, model performance, feature importance, correlations
 - **Usage**: Automatic (via pipeline) or manual: `python src/visualization/generate_charts.py`
@@ -117,7 +116,7 @@ This orchestrates:
 4. **Model Training** - Trains multiple ML models (Gradient Boosting, Random Forest, Logistic Regression)
 5. **Model Evaluation** - Assesses performance across different metrics and subgroups
 6. **Model Interpretability** - Generates SHAP analysis for feature importance
-For a quick overview of results, run:
+   For a quick overview of results, run:
 
 ```bash
 python run_analysis.py
@@ -161,7 +160,47 @@ This provides:
 - **Demographic Insights**: Age, socioeconomic, and living situation effects
 - **Technology Barriers**: Digital literacy and tech readiness impacts
 - **Correlation Strength**: Statistical relationships between variables
- 
+
+#### Key Metrics to Look For & Understand:
+
+**AgeTech Adoption Rate (25-45%)**
+
+- **Expected Range**: 25-45% overall adoption rate
+- **Why This Range**: Based on real-world research showing that technology adoption among older adults (65+) typically falls between 25-45%. This is based off studies on internet and smartphone use, as well as other variables listed in this study.
+- **Realistic Variation**: Each pipeline run generates slightly different adoption rates within this range due to the probabilistic nature of the synthetic data generation
+
+
+**🎲 Adoption Probability Breakdown**
+The synthetic data generation uses a multi-factor probability model:
+
+**Base Rate (20-50%)**: Starting probability for each individual
+**Age Modifiers**:
+
+- 65-74: +15% (highest adoption)
+- 75-84: -10% (moderate decline)
+- 85+: -25% (significant decline)
+
+**Digital Literacy Modifiers**:
+
+- High: +25% (strong positive)
+- Medium: 0% (neutral)
+- Low: -25% (strong negative)
+
+**Technology Willingness Modifiers**:
+
+- High: +20% (strong positive)
+- Medium: 0% (neutral)
+- Low: -20% (strong negative)
+
+**Cognitive Status Modifiers**:
+
+- No Impairment: +10% (positive)
+- MCI: -10% (moderate negative)
+- Dementia: -25% (strong negative)
+
+**Additional Factors**: Socioeconomic status, caregiver support, tech assistance availability, attitude toward technology, physical mobility, and sensory impairments all contribute smaller but significant modifiers.
+
+**Final Probability**: All modifiers are combined with controlled random noise (±8%) and clipped to realistic bounds (5-75%), ensuring adoption rates stay within the 25-45% target range while maintaining realistic individual variation.
 
 ## Ethical Considerations
 
