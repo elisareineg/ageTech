@@ -4,14 +4,70 @@ AGETECH MODEL EVALUATION REPORT
 
 1. OVERALL MODEL PERFORMANCE
 ----------------------------------------
-Accuracy:  0.5800
-Precision: 0.5833
-Recall:    0.8750
-F1 Score:  0.7000
-AUC-ROC:   0.5952
+Accuracy:  0.7600
+Precision: 0.8375
+Recall:    0.8590
+F1 Score:  0.8481
+AUC-ROC:   0.7182
 
 2. DEMOGRAPHIC SUBGROUP ANALYSIS
 ----------------------------------------
+
+AGE_GROUP:
+  65-74:
+    Sample Size: 42
+    Adoption Rate: 0.810
+    F1 Score: 0.8611
+    AUC-ROC: 0.7059
+  75-84:
+    Sample Size: 45
+    Adoption Rate: 0.756
+    F1 Score: 0.8060
+    AUC-ROC: 0.6297
+  85+:
+    Sample Size: 13
+    Adoption Rate: 0.769
+    F1 Score: 0.9524
+    AUC-ROC: 0.9667
+
+SOCIOECONOMIC_STATUS:
+  Low:
+    Sample Size: 31
+    Adoption Rate: 0.742
+    F1 Score: 0.8636
+    AUC-ROC: 0.8315
+  Medium:
+    Sample Size: 57
+    Adoption Rate: 0.860
+    F1 Score: 0.8980
+    AUC-ROC: 0.7474
+  High:
+    Sample Size: 12
+    Adoption Rate: 0.500
+    F1 Score: 0.5333
+    AUC-ROC: 0.3194
+
+LIVING_SITUATION:
+  Independent Living:
+    Sample Size: 47
+    Adoption Rate: 0.809
+    F1 Score: 0.8205
+    AUC-ROC: 0.4854
+  Assisted Living:
+    Sample Size: 22
+    Adoption Rate: 0.682
+    F1 Score: 0.8571
+    AUC-ROC: 0.8762
+  Nursing Home:
+    Sample Size: 19
+    Adoption Rate: 0.842
+    F1 Score: 0.9091
+    AUC-ROC: 0.8125
+  With Family:
+    Sample Size: 12
+    Adoption Rate: 0.750
+    F1 Score: 0.9412
+    AUC-ROC: 0.9259
 
 3. CLINICAL SUBGROUP ANALYSIS
 ----------------------------------------
@@ -24,6 +80,18 @@ AUC-ROC:   0.5952
 
 6. STATISTICAL SIGNIFICANCE TESTING
 ----------------------------------------
+age_group:
+  F-statistic: nan
+  p-value: nan
+  Significant: False
+socioeconomic_status:
+  F-statistic: nan
+  p-value: nan
+  Significant: False
+living_situation:
+  F-statistic: nan
+  p-value: nan
+  Significant: False
 
 7. CLINICAL RELEVANCE ASSESSMENT
 ----------------------------------------

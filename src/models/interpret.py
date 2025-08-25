@@ -63,6 +63,22 @@ class AgeTechInterpreter:
             if os.path.exists(selector_path):
                 selector = joblib.load(selector_path)
                 print(f"Loaded saved feature selector")
+                
+                # Apply to test data using the same feature names as training
+                X_test_selected = selector.transform(X_test)
+                # Use the exact feature names that the model was trained on
+                if hasattr(model, 'feature_names_in_'):
+                    feature_names = model.feature_names_in_
+                    # Ensure we have the right number of features
+                    if len(feature_names) != X_test_selected.shape[1]:
+                        print(f"Warning: Feature count mismatch. Model expects {len(feature_names)}, got {X_test_selected.shape[1]}")
+                        # Use generic feature names as fallback
+                        feature_names = [f"feature_{i}" for i in range(X_test_selected.shape[1])]
+                else:
+                    # Fallback for RFE
+                    feature_names = [f"feature_{i}" for i in range(X_test_selected.shape[1])]
+                X_test = pd.DataFrame(X_test_selected, columns=feature_names, index=X_test.index)
+                
             else:
                 # Fallback: recreate selector (less reliable)
                 from sklearn.feature_selection import SelectKBest, f_classif
@@ -72,11 +88,11 @@ class AgeTechInterpreter:
                 selector = SelectKBest(score_func=f_classif, k=15)
                 selector.fit(X_train, y_train)
                 print(f"Recreated feature selector (fallback)")
-            
-            # Apply to test data
-            X_test_selected = selector.transform(X_test)
-            selected_features = X_test.columns[selector.get_support()].tolist()
-            X_test = pd.DataFrame(X_test_selected, columns=selected_features)
+                
+                # Apply to test data
+                X_test_selected = selector.transform(X_test)
+                selected_features = X_test.columns[selector.get_support()].tolist()
+                X_test = pd.DataFrame(X_test_selected, columns=selected_features)
             
             print(f"Loaded test data: {X_test.shape}")
             

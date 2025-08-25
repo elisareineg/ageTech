@@ -21,6 +21,7 @@ class AgeTechDataGenerator:
     def __init__(self, n_samples: int = 500, random_state: int = 42):
         self.n_samples = n_samples
         self.random_state = random_state
+        # Use consistent random seed for reproducible results
         np.random.seed(random_state)
         random.seed(random_state)
         
@@ -39,11 +40,11 @@ class AgeTechDataGenerator:
             },
             'socioeconomic_status': {
                 'values': ['Low', 'Medium', 'High'],
-                'probabilities': [0.25, 0.50, 0.25]
+                'probabilities': [0.30, 0.50, 0.20]  # More realistic SES distribution
             },
             'living_situation': {
                 'values': ['Independent Living', 'Assisted Living', 'Nursing Home', 'With Family'],
-                'probabilities': [0.60, 0.20, 0.10, 0.10]
+                'probabilities': [0.50, 0.20, 0.15, 0.15]  # More realistic distribution
             }
         }
     
@@ -52,11 +53,11 @@ class AgeTechDataGenerator:
         return {
             'cognitive_status': {
                 'values': ['No Impairment', 'MCI', 'Dementia'],
-                'probabilities': [0.70, 0.20, 0.10]  # Based on prevalence studies
+                'probabilities': [0.60, 0.30, 0.10]  # More realistic prevalence
             },
             'physical_mobility': {
                 'values': ['Independent', 'Assistive Device', 'Full Assistance'],
-                'probabilities': [0.65, 0.25, 0.10]
+                'probabilities': [0.60, 0.30, 0.10]
             },
             'hearing_vision_impairment': {
                 'values': ['None', 'Mild', 'Moderate', 'Severe'],
@@ -76,8 +77,8 @@ class AgeTechDataGenerator:
         """Define social support variables."""
         return {
             'caregiver_support': {
-                'values': ['None', 'Informal Only', 'Formal Only', 'Both'],
-                'probabilities': [0.20, 0.50, 0.10, 0.20]
+                'values': ['None', 'Family', 'Professional', 'Both'],
+                'probabilities': [0.20, 0.40, 0.25, 0.15]  # More realistic distribution
             },
             'social_engagement': {
                 'values': ['Isolated', 'Moderate', 'Active'],
@@ -117,16 +118,19 @@ class AgeTechDataGenerator:
                 'probabilities': [0.25, 0.50, 0.25]
             },
             'device_preferences': {
-                'values': ['Simple', 'Standard', 'Advanced'],
-                'probabilities': [0.40, 0.45, 0.15]
+                'values': ['Health Monitoring', 'Safety/Emergency', 'Communication', 'Cognitive Assistance', 'Mobility Assistance'],
+                'probabilities': [0.25, 0.20, 0.20, 0.20, 0.15]
             }
         }
     
     def _generate_categorical_variable(self, var_def: Dict) -> List:
-        """Generate categorical variable based on defined probabilities."""
-        # Ensure probabilities sum to 1
+        """Generate categorical variable based on defined probabilities with random variation."""
+        # Add small random variation to probabilities to make them truly random
         probs = np.array(var_def['probabilities'])
-        probs = probs / probs.sum()
+        noise = np.random.normal(0, 0.02, len(probs))
+        probs = probs + noise
+        probs = np.maximum(probs, 0.01)  # Ensure no negative probabilities
+        probs = probs / probs.sum()  # Renormalize
         
         return np.random.choice(
             var_def['values'],
@@ -195,53 +199,115 @@ class AgeTechDataGenerator:
         
         df['health_risk_score'] = health_scores
         
+        # Social Support Score
+        social_support_mapping = {
+            'caregiver_support': {'None': 0, 'Family': 1, 'Professional': 2, 'Both': 3},
+            'social_engagement': {'Isolated': 0, 'Moderate': 1, 'Active': 2}
+        }
+        
+        social_scores = []
+        for _, row in df.iterrows():
+            score = 0
+            for var, mapping in social_support_mapping.items():
+                score += mapping.get(row[var], 0)
+            social_scores.append(score)
+        
+        df['social_support_score'] = social_scores
+        
+        # Digital Literacy Score (numeric)
+        digital_literacy_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
+        df['digital_literacy_score'] = df['digital_literacy'].map(digital_literacy_mapping)
+        
+        # Technology Willingness Score (numeric)
+        tech_willingness_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
+        df['technology_willingness'] = df['willingness_new_tech'].map(tech_willingness_mapping)
+        
         return df
     
     def _generate_adoption_outcome(self, df: pd.DataFrame) -> List[int]:
-        """Generate adoption outcome based on key predictors with realistic probabilities."""
+        """Generate adoption outcome based on key predictors with varied adoption rates."""
         
-        # Base adoption probability based off references/research
-        base_prob = 0.35  # Realistic adoption rate
+        # Create truly random base adoption probabilities
+        base_rates = np.random.uniform(0.30, 0.80, self.n_samples)
         
         adoption_probs = []
-        for _, row in df.iterrows():
-            prob = base_prob
+        for i, (_, row) in enumerate(df.iterrows()):
+            base_prob = base_rates[i]
             
-            # Adjust based on key predictors
+            # Age affects adoption rate
+            if row['age_group'] == '65-74':
+                age_modifier = 0.15
+            elif row['age_group'] == '75-84':
+                age_modifier = 0.0
+            else:  # 85+
+                age_modifier = -0.2
+            
+            # Socioeconomic status affects adoption
+            if row['socioeconomic_status'] == 'High':
+                ses_modifier = 0.2
+            elif row['socioeconomic_status'] == 'Medium':
+                ses_modifier = 0.05
+            else:  # Low
+                ses_modifier = -0.15
+            
+            # Digital literacy strongly affects adoption
             if row['digital_literacy'] == 'High':
-                prob += 0.25
-            elif row['digital_literacy'] == 'Low':
-                prob -= 0.15
-                
-            if row['willingness_new_tech'] == 'High':
-                prob += 0.20
-            elif row['willingness_new_tech'] == 'Low':
-                prob -= 0.20
-                
-            if row['cognitive_status'] == 'No Impairment':
-                prob += 0.15
-            elif row['cognitive_status'] == 'Dementia':
-                prob -= 0.25
-                
-            if row['caregiver_support'] != 'None':
-                prob += 0.10
-                
-            if row['tech_assistance_availability'] == 'Readily Available':
-                prob += 0.15
-                
-            if row['attitude_toward_technology'] == 'Positive':
-                prob += 0.15
-            elif row['attitude_toward_technology'] == 'Negative':
-                prob -= 0.20
-                
-            # Interaction effects
-            if row['digital_willingness_interaction'] == 1:
-                prob += 0.10
-                
-            # Ensure probability is between 0 and 1
-            prob = max(0.05, min(0.95, prob))
+                digital_modifier = 0.25
+            elif row['digital_literacy'] == 'Medium':
+                digital_modifier = 0.05
+            else:  # Low
+                digital_modifier = -0.15
             
-            adoption_probs.append(prob)
+            # Technology willingness affects adoption
+            if row['willingness_new_tech'] == 'High':
+                tech_modifier = 0.20
+            elif row['willingness_new_tech'] == 'Medium':
+                tech_modifier = 0.05
+            else:  # Low
+                tech_modifier = -0.20
+            
+            # Cognitive status affects adoption
+            if row['cognitive_status'] == 'No Impairment':
+                cognitive_modifier = 0.15
+            elif row['cognitive_status'] == 'MCI':
+                cognitive_modifier = -0.05
+            else:  # Dementia
+                cognitive_modifier = -0.25
+            
+            # Caregiver support affects adoption
+            if row['caregiver_support'] != 'None':
+                caregiver_modifier = 0.10
+            else:
+                caregiver_modifier = 0.0
+            
+            # Tech assistance availability affects adoption
+            if row['tech_assistance_availability'] == 'Readily Available':
+                assistance_modifier = 0.15
+            elif row['tech_assistance_availability'] == 'Limited':
+                assistance_modifier = 0.05
+            else:  # None
+                assistance_modifier = -0.10
+            
+            # Attitude toward technology affects adoption
+            if row['attitude_toward_technology'] == 'Positive':
+                attitude_modifier = 0.15
+            elif row['attitude_toward_technology'] == 'Neutral':
+                attitude_modifier = 0.0
+            else:  # Negative
+                attitude_modifier = -0.20
+            
+            # Calculate final adoption probability
+            adoption_prob = (base_prob + age_modifier + ses_modifier + digital_modifier + 
+                           tech_modifier + cognitive_modifier + caregiver_modifier + 
+                           assistance_modifier + attitude_modifier)
+            
+            # Add more random noise to prevent patterns
+            adoption_prob += np.random.normal(0, 0.10)
+            
+            # Clip to valid probability range
+            adoption_prob = max(0.05, min(0.95, adoption_prob))
+            
+            adoption_probs.append(adoption_prob)
         
         # Generate outcomes
         outcomes = np.random.binomial(1, adoption_probs)

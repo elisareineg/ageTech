@@ -1,0 +1,46 @@
+AgeTech Adoption Prediction - Analysis Summary Report
+============================================================
+Generated on: 2025-08-25 17:36:12
+
+📊 DATA OVERVIEW
+--------------------
+Total samples: 500
+Adoption rate: 75.40%
+Features: 27
+
+🤖 MODEL PERFORMANCE SUMMARY
+------------------------------
+Random Forest:
+  F1 Score: 0.953
+  AUC-ROC:  0.986
+  Accuracy: 0.925
+
+Gradient Boosting:
+  F1 Score: 0.985
+  AUC-ROC:  0.999
+  Accuracy: 0.978
+
+Logistic Regression:
+  F1 Score: 0.872
+  AUC-ROC:  0.804
+  Accuracy: 0.785
+
+🏆 BEST MODEL: Gradient Boosting (F1: 0.985)
+
+💡 KEY INSIGHTS
+---------------
+Top 5 predictors of AgeTech adoption:
+  1. tech_assistance_availability: 0.207
+  2. cognitive_status: 0.205
+  3. cognitive_assistance_interaction: 0.194
+  4. technology_readiness_index: 0.185
+  5. technology_willingness: 0.161
+
+Demographic insights:
+  • Highest adoption: 65-74 (82.5%)
+  • Lowest adoption: 85+ (64.3%)
+  • Best socioeconomic group: Medium (80.1%)
+
+Technology readiness insights:
+  • Digital literacy impact: High users (82.7% adoption)
+  • Willingness impact: High users (80.7% adoption)

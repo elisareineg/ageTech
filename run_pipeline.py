@@ -32,16 +32,13 @@ def main():
     os.makedirs("data/processed", exist_ok=True)
     os.makedirs("models", exist_ok=True)
     os.makedirs("results", exist_ok=True)
-    os.makedirs("notebooks", exist_ok=True)
-    
     pipeline_steps = [
         ("1. Synthetic Data Generation", "src.data.generate_synthetic_data"),
         ("2. Data Preprocessing", "src.data.preprocess"),
         ("3. Feature Engineering", "src.features.engineering"),
         ("4. Model Training", "src.models.train"),
         ("5. Model Evaluation", "src.models.evaluate"),
-        ("6. Model Interpretability", "src.models.interpret"),
-        ("7. Exploratory Data Analysis", "notebooks/01_eda.ipynb")
+        ("6. Model Interpretability", "src.models.interpret")
     ]
     
     start_time = time.time()
@@ -51,18 +48,12 @@ def main():
         print("-" * 50)
         
         try:
-            if module_path.endswith('.ipynb'):
-                # Handle notebook execution
-                print(f"Executing notebook: {module_path}")
-                # Note: In a real environment, you might use nbconvert or papermill
-                print("✓ Notebook ready for execution")
-            else:
-                # Handle Python module execution
-                print(f"Running module: {module_path}")
-                module = __import__(module_path, fromlist=['main'])
-                if hasattr(module, 'main'):
-                    module.main()
-                print("✓ Module completed successfully")
+            # Handle Python module execution
+            print(f"Running module: {module_path}")
+            module = __import__(module_path, fromlist=['main'])
+            if hasattr(module, 'main'):
+                module.main()
+            print("✓ Module completed successfully")
                 
         except Exception as e:
             print(f"✗ Error in {step_name}: {e}")
@@ -103,11 +94,36 @@ def main():
     print("Next Steps:")
     print("-" * 30)
     print("1. Review results in the 'results/' directory")
-    print("2. Explore visualizations and reports")
-    print("3. Run Jupyter notebooks for detailed analysis")
-    print("4. Examine model performance and interpretability")
+    print("2. Explore visualizations in the 'visualizations/' directory")
+    print("3. Examine model performance and interpretability")
+    print("4. Check generated charts and summary reports")
     print()
     print("Pipeline completed successfully! 🎉")
+    
+    # Generate visualizations from results
+    print("\n" + "="*70)
+    print("GENERATING VISUALIZATIONS FROM RESULTS")
+    print("="*70)
+    try:
+        from src.visualization.generate_charts import AgeTechVisualizer
+        visualizer = AgeTechVisualizer()
+        visualizer.generate_all_visualizations()
+        print("✅ Visualizations generated successfully!")
+    except Exception as e:
+        print(f"⚠️  Could not generate visualizations: {e}")
+        print("You can manually run: python src/visualization/generate_charts.py")
+    
+    # Run cleanup to ensure only the most recent data file remains
+    print("\n" + "="*70)
+    print("CLEANING UP OLD FILES")
+    print("="*70)
+    try:
+        from src.visualization.cleanup_old_files import cleanup_data_files
+        cleanup_data_files()
+        print("✅ Cleanup completed successfully!")
+    except Exception as e:
+        print(f"⚠️  Could not run cleanup: {e}")
+        print("You can manually run: python src/visualization/cleanup_old_files.py")
 
 if __name__ == "__main__":
     main() 

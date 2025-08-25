@@ -68,6 +68,22 @@ class AgeTechEvaluator:
             if os.path.exists(selector_path):
                 selector = joblib.load(selector_path)
                 print(f"Loaded saved feature selector")
+                
+                # Apply to test data using the same feature names as training
+                X_test_selected = selector.transform(X_test)
+                # Use the exact feature names that the model was trained on
+                if hasattr(model, 'feature_names_in_'):
+                    feature_names = model.feature_names_in_
+                    # Ensure we have the right number of features
+                    if len(feature_names) != X_test_selected.shape[1]:
+                        print(f"Warning: Feature count mismatch. Model expects {len(feature_names)}, got {X_test_selected.shape[1]}")
+                        # Use generic feature names as fallback
+                        feature_names = [f"feature_{i}" for i in range(X_test_selected.shape[1])]
+                else:
+                    # Fallback for RFE
+                    feature_names = [f"feature_{i}" for i in range(X_test_selected.shape[1])]
+                X_test = pd.DataFrame(X_test_selected, columns=feature_names, index=X_test.index)
+                
             else:
                 # Fallback: recreate selector (less reliable)
                 from sklearn.feature_selection import SelectKBest, f_classif
@@ -77,11 +93,11 @@ class AgeTechEvaluator:
                 selector = SelectKBest(score_func=f_classif, k=15)
                 selector.fit(X_train, y_train)
                 print(f"Recreated feature selector (fallback)")
-            
-            # Apply to test data
-            X_test_selected = selector.transform(X_test)
-            selected_features = X_test.columns[selector.get_support()].tolist()
-            X_test = pd.DataFrame(X_test_selected, columns=selected_features)
+                
+                # Apply to test data
+                X_test_selected = selector.transform(X_test)
+                selected_features = X_test.columns[selector.get_support()].tolist()
+                X_test = pd.DataFrame(X_test_selected, columns=selected_features)
             
             print(f"Loaded test data: {X_test.shape}")
             
@@ -164,6 +180,21 @@ class AgeTechEvaluator:
                                     y_test: pd.Series) -> Dict:
         """Analyze model performance across demographic subgroups."""
         
+        # Load original raw data for demographic analysis
+        try:
+            import glob
+            data_files = glob.glob("data/raw/agetch_synthetic_data_*.csv")
+            if data_files:
+                latest_file = max(data_files, key=os.path.getmtime)
+                raw_data = pd.read_csv(latest_file)
+                print(f"Loaded raw data for subgroup analysis: {latest_file}")
+            else:
+                print("No raw data found for subgroup analysis")
+                return {}
+        except Exception as e:
+            print(f"Error loading raw data for subgroup analysis: {e}")
+            return {}
+        
         # Define demographic subgroups
         subgroups = {
             'age_group': ['65-74', '75-84', '85+'],
@@ -174,29 +205,32 @@ class AgeTechEvaluator:
         subgroup_results = {}
         
         for subgroup_name, categories in subgroups.items():
-            if subgroup_name in X_test.columns:
+            if subgroup_name in raw_data.columns:
                 subgroup_results[subgroup_name] = {}
                 
                 for category in categories:
-                    # Filter data for this subgroup - handle both string and numeric values
-                    try:
-                        mask = X_test[subgroup_name] == category
-                    except:
-                        # If category comparison fails, try string conversion
-                        mask = X_test[subgroup_name].astype(str) == str(category)
+                    # Filter raw data for this subgroup
+                    mask = raw_data[subgroup_name] == category
                     
                     if mask.sum() > 10:  # Minimum sample size
-                        X_subgroup = X_test[mask]
-                        y_subgroup = y_test[mask]
+                        # Get indices for this subgroup
+                        subgroup_indices = raw_data[mask].index
                         
-                        # Evaluate performance
-                        subgroup_performance = self.evaluate_overall_performance(
-                            model, X_subgroup, y_subgroup
-                        )
-                        
-                        subgroup_results[subgroup_name][category] = {
-                            'sample_size': len(y_subgroup),
-                            'adoption_rate': y_subgroup.mean(),
+                        # Filter processed test data using same indices
+                        # Only use indices that exist in the test set
+                        valid_indices = [i for i in subgroup_indices if i < len(X_test)]
+                        if len(valid_indices) > 5:  # Minimum sample size for evaluation
+                            X_subgroup = X_test.iloc[valid_indices]
+                            y_subgroup = y_test.iloc[valid_indices]
+                            
+                            # Evaluate performance
+                            subgroup_performance = self.evaluate_overall_performance(
+                                model, X_subgroup, y_subgroup
+                            )
+                            
+                            subgroup_results[subgroup_name][category] = {
+                                'sample_size': len(y_subgroup),
+                                'adoption_rate': y_subgroup.mean(),
                             'metrics': subgroup_performance['metrics']
                         }
         
