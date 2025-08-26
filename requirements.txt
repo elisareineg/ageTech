@@ -49,7 +49,7 @@ python-dotenv>=0.19.0
 # Optional: Advanced hyperparameter optimization 
 # scikit-optimize>=0.9.0
 
-# Note: SHAP is now required for model interpretability
+# Note: SHAP is for model interpretability
 # If SHAP installation fails, the pipeline will run with limited interpretability features
 
 # Current Working Dependencies (as of latest pipeline run):
@@ -70,9 +70,3 @@ python-dotenv>=0.19.0
 # xgboost>=1.5.0
 # lightgbm>=3.3.0
 
-# New Features Added (August 2025):
-# - Direct visualization system (replaces Jupyter notebooks)
-# - Automatic file cleanup system
-# - Memory-optimized model training
-# - Smart feature selection
-# - Consistent random seed for reproducible results 
